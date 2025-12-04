@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Química de Soluções</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px 10px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .calc-section {
+            display: none;
+        }
+
+        .calc-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border 0.3s, background 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input.calculated {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .input-with-unit {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-with-unit input {
+            flex: 2;
+        }
+
+        .input-with-unit select {
+            flex: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button.clear-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            margin-top: 10px;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s;
+        }
+
+        .result.success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .result.error {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .formula {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .formula-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .formula-text {
+            font-family: 'Courier New', monospace;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #1976d2;
+        }
+
+        .info.tip {
+            background: #fff3e0;
+            color: #e65100;
+            border-left: 4px solid #ff9800;
+        }
+
+        .calculation-steps {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .calculation-steps .step {
+            margin: 5px 0;
+            padding-left: 10px;
+            border-left: 2px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Calculadora Química</h1>
+            <p>Cálculos de Soluções e Concentrações</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('conc-comum')">C (g/L)</button>
+            <button class="tab" onclick="showTab('molar')">Molar</button>
+            <button class="tab" onclick="showTab('porcentagem')">%</button>
+            <button class="tab" onclick="showTab('densidade')">Densidade</button>
+            <button class="tab" onclick="showTab('fracao')">Fração</button>
+            <button class="tab" onclick="showTab('solubilidade')">Solubilidade</button>
+            <button class="tab" onclick="showTab('diluicao')">Diluição</button>
+        </div>
+
+        <div class="content">
+            <!-- Concentração Comum -->
+            <div class="calc-section active" id="conc-comum">
+                <div class="formula">
+                    <div class="formula-title">Fórmula</div>
+                    <div class="formula-text">C = m₁ / V (g/L)</div>
+                </div>
+                <div class="info tip">
+                    💡 Deixe EM BRANCO o valor que deseja calcular!
+                </div>
+                <div class="input-group">
+                    <label>Concentração (C)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="cc-conc" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="cc-conc-unit">
+                            <option value="1">g/L</option>
+                            <option value="0.001">mg/L</option>
+                            <option value="1000">kg/L</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Massa do soluto (m₁)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="cc-massa" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="cc-massa-unit">
+                            <option value="1">g</option>
+                            <option value="0.001">mg</option>
+                            <option value="1000">kg</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Volume da solução (V)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="cc-volume" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="cc-volume-unit">
+                            <option value="1">L</option>
+                            <option value="0.001">mL</option>
+                            <option value="0.000001">μL</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="calcConcComum()">Calcular</button>
+                <button class="clear-btn" onclick="clearFields('cc')">Limpar</button>
+                <div class="result" id="cc-result"></div>
+                <div class="calculation-steps" id="cc-steps" style="display:none;"></div>
+            </div>
+
+            <!-- Concentração Molar -->
+            <div class="calc-section" id="molar">
+                <div class="formula">
+                    <div class="formula-title">Fórmula</div>
+                    <div class="formula-text">M = n / V = m / (MM × V) (mol/L)</div>
+                </div>
+                <div class="info tip">
+                    💡 Deixe EM BRANCO o valor que deseja calcular!
+                </div>
+                <div class="input-group">
+                    <label>Molaridade (M)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="m-molar" step="any" placeholder="Deixe vazio para calcular">
+                        <span style="padding: 12px; background: #f0f0f0; border-radius: 10px;">mol/L</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Massa do soluto (m)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="m-massa" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="m-massa-unit">
+                            <option value="1">g</option>
+                            <option value="0.001">mg</option>
+                            <option value="1000">kg</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Massa Molar (MM) - Obrigatório</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="m-mm" step="any" placeholder="g/mol">
+                        <span style="padding: 12px; background: #f0f0f0; border-radius: 10px;">g/mol</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Volume da solução (V)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="m-volume" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="m-volume-unit">
+                            <option value="1">L</option>
+                            <option value="0.001">mL</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="calcMolar()">Calcular</button>
+                <button class="clear-btn" onclick="clearFields('m')">Limpar</button>
+                <div class="result" id="m-result"></div>
+                <div class="calculation-steps" id="m-steps" style="display:none;"></div>
+            </div>
+
+            <!-- Porcentagem -->
+            <div class="calc-section" id="porcentagem">
+                <div class="info tip">
+                    💡 Deixe EM BRANCO o valor que deseja calcular!
+                </div>
+                <div class="input-group">
+                    <label>Tipo de Concentração</label>
+                    <select id="p-tipo" onchange="updatePorcentagemLabels()">
+                        <option value="mm">Massa/Massa (m/m %)</option>
+                        <option value="vv">Volume/Volume (v/v %)</option>
+                        <option value="mv">Massa/Volume (m/v %)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Porcentagem (%)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="p-perc" step="any" placeholder="Deixe vazio para calcular">
+                        <span style="padding: 12px; background: #f0f0f0; border-radius: 10px;">%</span>
+                    </div>
+                </div>
+                <div id="p-inputs">
+                    <div class="input-group">
+                        <label id="p-label1">Massa do soluto</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="p-val1" step="any" placeholder="Deixe vazio para calcular">
+                            <select id="p-unit1">
+                                <option value="1">g</option>
+                                <option value="0.001">mg</option>
+                                <option value="1000">kg</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label id="p-label2">Massa da solução</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="p-val2" step="any" placeholder="Deixe vazio para calcular">
+                            <select id="p-unit2">
+                                <option value="1">g</option>
+                                <option value="0.001">mg</option>
+                                <option value="1000">kg</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="calcPorcentagem()">Calcular</button>
+                <button class="clear-btn" onclick="clearFields('p')">Limpar</button>
+                <div class="result" id="p-result"></div>
+                <div class="calculation-steps" id="p-steps" style="display:none;"></div>
+            </div>
+
+            <!-- Densidade -->
+            <div class="calc-section" id="densidade">
+                <div class="formula">
+                    <div class="formula-title">Fórmula</div>
+                    <div class="formula-text">d = m / V</div>
+                </div>
+                <div class="info tip">
+                    💡 Deixe EM BRANCO o valor que deseja calcular!
+                </div>
+                <div class="input-group">
+                    <label>Densidade (d)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="d-dens" step="any" placeholder="Deixe vazio para calcular">
+                        <span style="padding: 12px; background: #f0f0f0; border-radius: 10px;">g/mL</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Massa (m)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="d-massa" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="d-massa-unit">
+                            <option value="1">g</option>
+                            <option value="0.001">mg</option>
+                            <option value="1000">kg</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Volume (V)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="d-volume" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="d-volume-unit">
+                            <option value="1">mL</option>
+                            <option value="1000">L</option>
+                            <option value="0.001">μL</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="calcDensidade()">Calcular</button>
+                <button class="clear-btn" onclick="clearFields('d')">Limpar</button>
+                <div class="result" id="d-result"></div>
+                <div class="calculation-steps" id="d-steps" style="display:none;"></div>
+            </div>
+
+            <!-- Fração Molar -->
+            <div class="calc-section" id="fracao">
+                <div class="formula">
+                    <div class="formula-title">Fórmula</div>
+                    <div class="formula-text">X₁ = n₁ / (n₁ + n₂)</div>
+                </div>
+                <div class="info tip">
+                    💡 Deixe EM BRANCO o valor que deseja calcular!
+                </div>
+                <div class="input-group">
+                    <label>Fração Molar do soluto (X₁)</label>
+                    <input type="number" id="f-x" step="any" placeholder="Deixe vazio para calcular (0 a 1)">
+                </div>
+                <div class="input-group">
+                    <label>Número de mols do soluto (n₁)</label>
+                    <input type="number" id="f-n1" step="any" placeholder="Deixe vazio para calcular">
+                </div>
+                <div class="input-group">
+                    <label>Número de mols do solvente (n₂)</label>
+                    <input type="number" id="f-n2" step="any" placeholder="Deixe vazio para calcular">
+                </div>
+                <button onclick="calcFracaoMolar()">Calcular</button>
+                <button class="clear-btn" onclick="clearFields('f')">Limpar</button>
+                <div class="result" id="f-result"></div>
+                <div class="calculation-steps" id="f-steps" style="display:none;"></div>
+            </div>
+
+            <!-- Coeficiente de Solubilidade -->
+            <div class="calc-section" id="solubilidade">
+                <div class="formula">
+                    <div class="formula-title">Fórmula</div>
+                    <div class="formula-text">Cs = (massa soluto / massa solvente) × 100</div>
+                </div>
+                <div class="info tip">
+                    💡 Deixe EM BRANCO o valor que deseja calcular!
+                </div>
+                <div class="input-group">
+                    <label>Coeficiente de Solubilidade (Cs)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="s-cs" step="any" placeholder="Deixe vazio para calcular">
+                        <span style="padding: 12px; background: #f0f0f0; border-radius: 10px; font-size: 12px;">g/100g</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Massa de soluto dissolvida</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="s-soluto" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="s-soluto-unit">
+                            <option value="1">g</option>
+                            <option value="0.001">mg</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Massa do solvente</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="s-solvente" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="s-solvente-unit">
+                            <option value="1">g</option>
+                            <option value="1000">kg</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="calcSolubilidade()">Calcular</button>
+                <button class="clear-btn" onclick="clearFields('s')">Limpar</button>
+                <div class="result" id="s-result"></div>
+                <div class="calculation-steps" id="s-steps" style="display:none;"></div>
+            </div>
+
+            <!-- Diluição -->
+            <div class="calc-section" id="diluicao">
+                <div class="formula">
+                    <div class="formula-title">Fórmula</div>
+                    <div class="formula-text">C₁ × V₁ = C₂ × V₂</div>
+                </div>
+                <div class="info tip">
+                    💡 Deixe EM BRANCO o valor que deseja calcular!
+                </div>
+                <div class="input-group">
+                    <label>Concentração inicial (C₁)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="dil-c1" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="dil-c1-unit">
+                            <option value="1">mol/L</option>
+                            <option value="1">g/L</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Volume inicial (V₁)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="dil-v1" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="dil-v1-unit">
+                            <option value="1">L</option>
+                            <option value="0.001">mL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Concentração final (C₂)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="dil-c2" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="dil-c2-unit">
+                            <option value="1">mol/L</option>
+                            <option value="1">g/L</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Volume final (V₂)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="dil-v2" step="any" placeholder="Deixe vazio para calcular">
+                        <select id="dil-v2-unit">
+                            <option value="1">L</option>
+                            <option value="0.001">mL</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="calcDiluicao()">Calcular</button>
+                <button class="clear-btn" onclick="clearFields('dil')">Limpar</button>
+                <div class="result" id="dil-result"></div>
+                <div class="calculation-steps" id="dil-steps" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            const sections = document.querySelectorAll('.calc-section');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function showResult(elementId, message, isSuccess = true) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = 'result show ' + (isSuccess ? 'success' : 'error');
+        }
+
+        function showSteps(elementId, steps) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = '<strong>📝 Passo a passo:</strong><br>' + 
+                steps.map(s => `<div class="step">${s}</div>`).join('');
+            el.style.display = 'block';
+        }
+
+        function hideSteps(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+
+        function clearFields(prefix) {
+            const inputs = document.querySelectorAll(`[id^="${prefix}-"]`);
+            inputs.forEach(input => {
+                if (input.tagName === 'INPUT') {
+                    input.value = '';
+                    input.classList.remove('calculated');
+                }
+            });
+            const result = document.getElementById(`${prefix}-result`);
+            if (result) {
+                result.classList.remove('show');
+            }
+            const steps = document.getElementById(`${prefix}-steps`);
+            if (steps) {
+                steps.style.display = 'none';
+            }
+        }
+
+        function getValue(id) {
+            const val = document.getElementById(id).value;
+            return val === '' ? null : parseFloat(val);
+        }
+
+        function getValueWithUnit(id, unitId) {
+            const val = getValue(id);
+            if (val === null) return null;
+            const unit = parseFloat(document.getElementById(unitId).value);
+            return val * unit;
+        }
+
+        function setCalculated(id, value) {
+            const input = document.getElementById(id);
+            input.value = value.toPrecision(6);
+            input.classList.add('calculated');
+        }
+
+        // Concentração Comum: C = m / V
+        function calcConcComum() {
+            const C = getValueWithUnit('cc-conc', 'cc-conc-unit');
+            const m = getValueWithUnit('cc-massa', 'cc-massa-unit');
+            const V = getValueWithUnit('cc-volume', 'cc-volume-unit');
+
+            const nullCount = [C, m, V].filter(x => x === null).length;
+            
+            if (nullCount === 0) {
+                showResult('cc-result', '❌ Deixe UM campo em branco para calcular!', false);
+                hideSteps('cc-steps');
+                return;
+            }
+            if (nullCount > 1) {
+                showResult('cc-result', '❌ Preencha pelo menos 2 valores!', false);
+                hideSteps('cc-steps');
+                return;
+            }
+
+            let steps = [];
+            
+            if (C === null) {
+                // C = m / V
+                if (V === 0) {
+                    showResult('cc-result', '❌ Volume não pode ser zero!', false);
+                    return;
+                }
+                const result = m / V;
+                steps = [
+                    `Fórmula: C = m / V`,
+                    `C = ${m} g / ${V} L`,
+                    `C = ${result.toPrecision(6)} g/L`
+                ];
+                setCalculated('cc-conc', result);
+                showResult('cc-result', `✓ Concentração = ${result.toPrecision(6)} g/L`);
+            } else if (m === null) {
+                // m = C × V
+                const result = C * V;
+                steps = [
+                    `Fórmula: m = C × V`,
+                    `m = ${C} g/L × ${V} L`,
+                    `m = ${result.toPrecision(6)} g`
+                ];
+                setCalculated('cc-massa', result);
+                showResult('cc-result', `✓ Massa = ${result.toPrecision(6)} g`);
+            } else {
+                // V = m / C
+                if (C === 0) {
+                    showResult('cc-result', '❌ Concentração não pode ser zero!', false);
+                    return;
+                }
+                const result = m / C;
+                steps = [
+                    `Fórmula: V = m / C`,
+                    `V = ${m} g / ${C} g/L`,
+                    `V = ${result.toPrecision(6)} L`
+                ];
+                setCalculated('cc-volume', result);
+                showResult('cc-result', `✓ Volume = ${result.toPrecision(6)} L`);
+            }
+            showSteps('cc-steps', steps);
+        }
+
+        // Molar: M = m / (MM × V)
+        function calcMolar() {
+            const M = getValue('m-molar');
+            const m = getValueWithUnit('m-massa', 'm-massa-unit');
+            const MM = getValue('m-mm');
+            const V = getValueWithUnit('m-volume', 'm-volume-unit');
+
+            if (!MM || MM === 0) {
+                showResult('m-result', '❌ Massa Molar é obrigatória!', false);
+                hideSteps('m-steps');
+                return;
+            }
+
+            const nullCount = [M, m, V].filter(x => x === null).length;
+            
+            if (nullCount === 0) {
+                showResult('m-result', '❌ Deixe UM campo em branco (exceto MM)!', false);
+                hideSteps('m-steps');
+                return;
+            }
+            if (nullCount > 1) {
+                showResult('m-result', '❌ Preencha pelo menos 2 valores (além de MM)!', false);
+                hideSteps('m-steps');
+                return;
+            }
+
+            let steps = [];
+
+            if (M === null) {
+                // M = m / (MM × V)
+                if (V === 0) {
+                    showResult('m-result', '❌ Volume não pode ser zero!', false);
+                    return;
+                }
+                const result = m / (MM * V);
+                steps = [
+                    `Fórmula: M = m / (MM × V)`,
+                    `M = ${m} g / (${MM} g/mol × ${V} L)`,
+                    `M = ${result.toPrecision(6)} mol/L`
+                ];
+                setCalculated('m-molar', result);
+                showResult('m-result', `✓ Molaridade = ${result.toPrecision(6)} mol/L`);
+            } else if (m === null) {
+                // m = M × MM × V
+                const result = M * MM * V;
+                steps = [
+                    `Fórmula: m = M × MM × V`,
+                    `m = ${M} mol/L × ${MM} g/mol × ${V} L`,
+                    `m = ${result.toPrecision(6)} g`
+                ];
+                setCalculated('m-massa', result);
+                showResult('m-result', `✓ Massa = ${result.toPrecision(6)} g`);
+            } else {
+                // V = m / (M × MM)
+                if (M === 0) {
+                    showResult('m-result', '❌ Molaridade não pode ser zero!', false);
+                    return;
+                }
+                const result = m / (M * MM);
+                steps = [
+                    `Fórmula: V = m / (M × MM)`,
+                    `V = ${m} g / (${M} mol/L × ${MM} g/mol)`,
+                    `V = ${result.toPrecision(6)} L`
+                ];
+                setCalculated('m-volume', result);
+                showResult('m-result', `✓ Volume = ${result.toPrecision(6)} L`);
+            }
+            showSteps('m-steps', steps);
+        }
+
+        function updatePorcentagemLabels() {
+            const tipo = document.getElementById('p-tipo').value;
+            const label1 = document.getElementById('p-label1');
+            const label2 = document.getElementById('p-label2');
+            const unit1 = document.getElementById('p-unit1');
+            const unit2 = document.getElementById('p-unit2');
+            
+            unit1.innerHTML = '';
+            unit2.innerHTML = '';
+            
+            if (tipo === 'mm') {
+                label1.textContent = 'Massa do soluto';
+                label2.textContent = 'Massa da solução';
+                unit1.innerHTML = '<option value="1">g</option><option value="0.001">mg</option><option value="1000">kg</option>';
+                unit2.innerHTML = '<option value="1">g</option><option value="0.001">mg</option><option value="1000">kg</option>';
+            } else if (tipo === 'vv') {
+                label1.textContent = 'Volume do soluto';
+                label2.textContent = 'Volume da solução';
+                unit1.innerHTML = '<option value="1">mL</option><option value="1000">L</option>';
+                unit2.innerHTML = '<option value="1">mL</option><option value="1000">L</option>';
+            } else {
+                label1.textContent = 'Massa do soluto';
+                label2.textContent = 'Volume da solução';
+                unit1.innerHTML = '<option value="1">g</option><option value="0.001">mg</option><option value="1000">kg</option>';
+                unit2.innerHTML = '<option value="1">mL</option><option value="1000">L</option>';
+            }
+        }
+
+        // Porcentagem: % = (parte / total) × 100
+        function calcPorcentagem() {
+            const perc = getValue('p-perc');
+            const val1 = getValueWithUnit('p-val1', 'p-unit1');
+            const val2 = getValueWithUnit('p-val2', 'p-unit2');
+            const tipo = document.getElementById('p-tipo').value;
+
+            const nullCount = [perc, val1, val2].filter(x => x === null).length;
+            
+            if (nullCount === 0) {
+                showResult('p-result', '❌ Deixe UM campo em branco para calcular!', false);
+                hideSteps('p-steps');
+                return;
+            }
+            if (nullCount > 1) {
+                showResult('p-result', '❌ Preencha pelo menos 2 valores!', false);
+                hideSteps('p-steps');
+                return;
+            }
+
+            let tipoTexto = tipo === 'mm' ? 'm/m' : (tipo === 'vv' ? 'v/v' : 'm/v');
+            let unidade1 = tipo === 'vv' ? 'mL' : 'g';
+            let unidade2 = tipo === 'mm' ? 'g' : 'mL';
+            if (tipo === 'mv') unidade2 = 'mL';
+            
+            let steps = [];
+
+            if (perc === null) {
+                // % = (parte / total) × 100
+                if (val2 === 0) {
+                    showResult('p-result', '❌ O total não pode ser zero!', false);
+                    return;
+                }
+                const result = (val1 / val2) * 100;
+                steps = [
+                    `Fórmula: % = (parte / total) × 100`,
+                    `% = (${val1} / ${val2}) × 100`,
+                    `% = ${result.toPrecision(6)} %`
+                ];
+                setCalculated('p-perc', result);
+                showResult('p-result', `✓ ${tipoTexto} = ${result.toPrecision(6)} %`);
+            } else if (val1 === null) {
+                // parte = (% × total) / 100
+                const result = (perc * val2) / 100;
+                steps = [
+                    `Fórmula: parte = (% × total) / 100`,
+                    `parte = (${perc} × ${val2}) / 100`,
+                    `parte = ${result.toPrecision(6)} ${unidade1}`
+                ];
+                setCalculated('p-val1', result);
+                showResult('p-result', `✓ Parte = ${result.toPrecision(6)} ${unidade1}`);
+            } else {
+                // total = (parte × 100) / %
+                if (perc === 0) {
+                    showResult('p-result', '❌ Porcentagem não pode ser zero!', false);
+                    return;
+                }
+                const result = (val1 * 100) / perc;
+                steps = [
+                    `Fórmula: total = (parte × 100) / %`,
+                    `total = (${val1} × 100) / ${perc}`,
+                    `total = ${result.toPrecision(6)} ${unidade2}`
+                ];
+                setCalculated('p-val2', result);
+                showResult('p-result', `✓ Total = ${result.toPrecision(6)} ${unidade2}`);
+            }
+            showSteps('p-steps', steps);
+        }
+
+        // Densidade: d = m / V
+        function calcDensidade() {
+            const d = getValue('d-dens');
+            const m = getValueWithUnit('d-massa', 'd-massa-unit');
+            const V = getValueWithUnit('d-volume', 'd-volume-unit');
+
+            const nullCount = [d, m, V].filter(x => x === null).length;
+            
+            if (nullCount === 0) {
+                showResult('d-result', '❌ Deixe UM campo em branco para calcular!', false);
+                hideSteps('d-steps');
+                return;
+            }
+            if (nullCount > 1) {
+                showResult('d-result', '❌ Preencha pelo menos 2 valores!', false);
+                hideSteps('d-steps');
+                return;
+            }
+
+            let steps = [];
+
+            if (d === null) {
+                // d = m / V
+                if (V === 0) {
+                    showResult('d-result', '❌ Volume não pode ser zero!', false);
+                    return;
+                }
+                const result = m / V;
+                steps = [
+                    `Fórmula: d = m / V`,
+                    `d = ${m} g / ${V} mL`,
+                    `d = ${result.toPrecision(6)} g/mL`
+                ];
+                setCalculated('d-dens', result);
+                showResult('d-result', `✓ Densidade = ${result.toPrecision(6)} g/mL`);
+            } else if (m === null) {
+                // m = d × V
+                const result = d * V;
+                steps = [
+                    `Fórmula: m = d × V`,
+                    `m = ${d} g/mL × ${V} mL`,
+                    `m = ${result.toPrecision(6)} g`
+                ];
+                setCalculated('d-massa', result);
+                showResult('d-result', `✓ Massa = ${result.toPrecision(6)} g`);
+            } else {
+                // V = m / d
+                if (d === 0) {
+                    showResult('d-result', '❌ Densidade não pode ser zero!', false);
+                    return;
+                }
+                const result = m / d;
+                steps = [
+                    `Fórmula: V = m / d`,
+                    `V = ${m} g / ${d} g/mL`,
+                    `V = ${result.toPrecision(6)} mL`
+                ];
+                setCalculated('d-volume', result);
+                showResult('d-result', `✓ Volume = ${result.toPrecision(6)} mL`);
+            }
+            showSteps('d-steps', steps);
+        }
+
+        // Fração Molar: X₁ = n₁ / (n₁ + n₂)
+        function calcFracaoMolar() {
+            const X = getValue('f-x');
+            const n1 = getValue('f-n1');
+            const n2 = getValue('f-n2');
+
+            const nullCount = [X, n1, n2].filter(x => x === null).length;
+            
+            if (nullCount === 0) {
+                showResult('f-result', '❌ Deixe UM campo em branco para calcular!', false);
+                hideSteps('f-steps');
+                return;
+            }
+            if (nullCount > 1) {
+                showResult('f-result', '❌ Preencha pelo menos 2 valores!', false);
+                hideSteps('f-steps');
+                return;
+            }
+
+            let steps = [];
+
+            if (X === null) {
+                // X = n1 / (n1 + n2)
+                if (n1 + n2 === 0) {
+                    showResult('f-result', '❌ Soma dos mols não pode ser zero!', false);
+                    return;
+                }
+                const result = n1 / (n1 + n2);
+                const x2 = 1 - result;
+                steps = [
+                    `Fórmula: X₁ = n₁ / (n₁ + n₂)`,
+                    `X₁ = ${n1} / (${n1} + ${n2})`,
+                    `X₁ = ${result.toPrecision(6)}`,
+                    `X₂ = 1 - X₁ = ${x2.toPrecision(6)}`
+                ];
+                setCalculated('f-x', result);
+                showResult('f-result', `✓ X₁ = ${result.toPrecision(6)} | X₂ = ${x2.toPrecision(6)}`);
+            } else if (n1 === null) {
+                // n1 = (X × n2) / (1 - X)
+                if (X >= 1) {
+                    showResult('f-result', '❌ Fração molar deve ser menor que 1!', false);
+                    return;
+                }
+                const result = (X * n2) / (1 - X);
+                steps = [
+                    `Fórmula: n₁ = (X₁ × n₂) / (1 - X₁)`,
+                    `n₁ = (${X} × ${n2}) / (1 - ${X})`,
+                    `n₁ = ${result.toPrecision(6)} mol`
+                ];
+                setCalculated('f-n1', result);
+                showResult('f-result', `✓ n₁ = ${result.toPrecision(6)} mol`);
+            } else {
+                // n2 = n1 × (1 - X) / X
+                if (X === 0) {
+                    showResult('f-result', '❌ Fração molar não pode ser zero!', false);
+                    return;
+                }
+                const result = n1 * (1 - X) / X;
+                steps = [
+                    `Fórmula: n₂ = n₁ × (1 - X₁) / X₁`,
+                    `n₂ = ${n1} × (1 - ${X}) / ${X}`,
+                    `n₂ = ${result.toPrecision(6)} mol`
+                ];
+                setCalculated('f-n2', result);
+                showResult('f-result', `✓ n₂ = ${result.toPrecision(6)} mol`);
+            }
+            showSteps('f-steps', steps);
+        }
+
+        // Solubilidade: Cs = (soluto / solvente) × 100
+        function calcSolubilidade() {
+            const Cs = getValue('s-cs');
+            const soluto = getValueWithUnit('s-soluto', 's-soluto-unit');
+            const solvente = getValueWithUnit('s-solvente', 's-solvente-unit');
+
+            const nullCount = [Cs, soluto, solvente].filter(x => x === null).length;
+            
+            if (nullCount === 0) {
+                showResult('s-result', '❌ Deixe UM campo em branco para calcular!', false);
+                hideSteps('s-steps');
+                return;
+            }
+            if (nullCount > 1) {
+                showResult('s-result', '❌ Preencha pelo menos 2 valores!', false);
+                hideSteps('s-steps');
+                return;
+            }
+
+            let steps = [];
+
+            if (Cs === null) {
+                // Cs = (soluto / solvente) × 100
+                if (solvente === 0) {
+                    showResult('s-result', '❌ Massa do solvente não pode ser zero!', false);
+                    return;
+                }
+                const result = (soluto / solvente) * 100;
+                steps = [
+                    `Fórmula: Cs = (soluto / solvente) × 100`,
+                    `Cs = (${soluto} g / ${solvente} g) × 100`,
+                    `Cs = ${result.toPrecision(6)} g/100g`
+                ];
+                setCalculated('s-cs', result);
+                showResult('s-result', `✓ Cs = ${result.toPrecision(6)} g/100g de solvente`);
+            } else if (soluto === null) {
+                // soluto = (Cs × solvente) / 100
+                const result = (Cs * solvente) / 100;
+                steps = [
+                    `Fórmula: soluto = (Cs × solvente) / 100`,
+                    `soluto = (${Cs} × ${solvente}) / 100`,
+                    `soluto = ${result.toPrecision(6)} g`
+                ];
+                setCalculated('s-soluto', result);
+                showResult('s-result', `✓ Massa de soluto = ${result.toPrecision(6)} g`);
+            } else {
+                // solvente = (soluto × 100) / Cs
+                if (Cs === 0) {
+                    showResult('s-result', '❌ Coeficiente não pode ser zero!', false);
+                    return;
+                }
+                const result = (soluto * 100) / Cs;
+                steps = [
+                    `Fórmula: solvente = (soluto × 100) / Cs`,
+                    `solvente = (${soluto} × 100) / ${Cs}`,
+                    `solvente = ${result.toPrecision(6)} g`
+                ];
+                setCalculated('s-solvente', result);
+                showResult('s-result', `✓ Massa de solvente = ${result.toPrecision(6)} g`);
+            }
+            showSteps('s-steps', steps);
+        }
+
+        // Diluição: C₁V₁ = C₂V₂
+        function calcDiluicao() {
+            const C1 = getValueWithUnit('dil-c1', 'dil-c1-unit');
+            const V1 = getValueWithUnit('dil-v1', 'dil-v1-unit');
+            const C2 = getValueWithUnit('dil-c2', 'dil-c2-unit');
+            const V2 = getValueWithUnit('dil-v2', 'dil-v2-unit');
+
+            const nullCount = [C1, V1, C2, V2].filter(x => x === null).length;
+            
+            if (nullCount === 0) {
+                showResult('dil-result', '❌ Deixe UM campo em branco para calcular!', false);
+                hideSteps('dil-steps');
+                return;
+            }
+            if (nullCount > 1) {
+                showResult('dil-result', '❌ Preencha pelo menos 3 valores!', false);
+                hideSteps('dil-steps');
+                return;
+            }
+
+            let steps = [];
+
+            if (C1 === null) {
+                // C1 = (C2 × V2) / V1
+                if (V1 === 0) {
+                    showResult('dil-result', '❌ V₁ não pode ser zero!', false);
+                    return;
+                }
+                const result = (C2 * V2) / V1;
+                steps = [
+                    `Fórmula: C₁ = (C₂ × V₂) / V₁`,
+                    `C₁ = (${C2} × ${V2}) / ${V1}`,
+                    `C₁ = ${result.toPrecision(6)}`
+                ];
+                setCalculated('dil-c1', result);
+                showResult('dil-result', `✓ C₁ = ${result.toPrecision(6)}`);
+            } else if (V1 === null) {
+                // V1 = (C2 × V2) / C1
+                if (C1 === 0) {
+                    showResult('dil-result', '❌ C₁ não pode ser zero!', false);
+                    return;
+                }
+                const result = (C2 * V2) / C1;
+                steps = [
+                    `Fórmula: V₁ = (C₂ × V₂) / C₁`,
+                    `V₁ = (${C2} × ${V2}) / ${C1}`,
+                    `V₁ = ${result.toPrecision(6)} L`
+                ];
+                setCalculated('dil-v1', result);
+                showResult('dil-result', `✓ V₁ = ${result.toPrecision(6)} L`);
+            } else if (C2 === null) {
+                // C2 = (C1 × V1) / V2
+                if (V2 === 0) {
+                    showResult('dil-result', '❌ V₂ não pode ser zero!', false);
+                    return;
+                }
+                const result = (C1 * V1) / V2;
+                steps = [
+                    `Fórmula: C₂ = (C₁ × V₁) / V₂`,
+                    `C₂ = (${C1} × ${V1}) / ${V2}`,
+                    `C₂ = ${result.toPrecision(6)}`
+                ];
+                setCalculated('dil-c2', result);
+                showResult('dil-result', `✓ C₂ = ${result.toPrecision(6)}`);
+            } else {
+                // V2 = (C1 × V1) / C2
+                if (C2 === 0) {
+                    showResult('dil-result', '❌ C₂ não pode ser zero!', false);
+                    return;
+                }
+                const result = (C1 * V1) / C2;
+                steps = [
+                    `Fórmula: V₂ = (C₁ × V₁) / C₂`,
+                    `V₂ = (${C1} × ${V1}) / ${C2}`,
+                    `V₂ = ${result.toPrecision(6)} L`
+                ];
+                setCalculated('dil-v2', result);
+                showResult('dil-result', `✓ V₂ = ${result.toPrecision(6)} L`);
+            }
+            showSteps('dil-steps', steps);
+        }
+
+        // Inicialização
+        updatePorcentagemLabels();
+    </script>
+</body>
+</html>
