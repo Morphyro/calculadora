@@ -257,6 +257,7 @@
             <button class="tab" onclick="showTab('fracao')">Fração</button>
             <button class="tab" onclick="showTab('solubilidade')">Solubilidade</button>
             <button class="tab" onclick="showTab('diluicao')">Diluição</button>
+            <button class="tab" onclick="showTab('massa-molar')">Massa Molar</button>
         </div>
 
         <div class="content">
@@ -575,6 +576,30 @@
                 <div class="result" id="dil-result"></div>
                 <div class="calculation-steps" id="dil-steps" style="display:none;"></div>
             </div>
+
+            <!-- Massa Molar -->
+            <div class="calc-section" id="massa-molar">
+                <div class="formula">
+                    <div class="formula-title">Calculadora de Massa Molar</div>
+                    <div class="formula-text">MM = Σ (massa atômica × quantidade)</div>
+                </div>
+                <div class="info">
+                    ⚗️ Digite a fórmula química do composto (ex: H2O, NaCl, H2SO4, Ca(OH)2)
+                </div>
+                <div class="input-group">
+                    <label>Fórmula Química</label>
+                    <input type="text" id="mm-formula" placeholder="Ex: H2O, NaCl, H2SO4, Ca(OH)2" style="text-transform: none;" oninput="this.value = this.value.replace(/[^A-Za-z0-9()]/g, '')">
+                </div>
+                <button onclick="calcMassaMolar()">Calcular Massa Molar</button>
+                <button class="clear-btn" onclick="clearMassaMolar()">Limpar</button>
+                <div class="result" id="mm-result"></div>
+                <div class="calculation-steps" id="mm-steps" style="display:none;"></div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px;">
+                    <div style="font-weight: 600; color: #667eea; margin-bottom: 10px;">📋 Elementos Disponíveis:</div>
+                    <div id="elementos-lista" style="font-size: 12px; color: #555; line-height: 1.8; max-height: 200px; overflow-y: auto;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -639,8 +664,38 @@
 
         function setCalculated(id, value) {
             const input = document.getElementById(id);
-            input.value = value.toPrecision(6);
+            input.value = formatNumber(value);
             input.classList.add('calculated');
+        }
+
+        // Função para definir valor calculado considerando a unidade selecionada
+        function setCalculatedWithUnit(id, valueInBase, unitId) {
+            const input = document.getElementById(id);
+            const unitFactor = parseFloat(document.getElementById(unitId).value);
+            const valueInUnit = valueInBase / unitFactor;
+            input.value = formatNumber(valueInUnit);
+            input.classList.add('calculated');
+            return valueInUnit;
+        }
+
+        // Função para obter o texto da unidade selecionada
+        function getUnitLabel(unitId) {
+            const select = document.getElementById(unitId);
+            return select.options[select.selectedIndex].text;
+        }
+
+        // Função para formatar números de forma legível
+        function formatNumber(value) {
+            if (value === 0) return '0';
+            const abs = Math.abs(value);
+            if (abs >= 0.001 && abs < 1000000) {
+                // Para números normais, usar até 6 casas decimais significativas
+                const formatted = parseFloat(value.toPrecision(6));
+                return formatted.toString();
+            } else {
+                // Para números muito grandes ou pequenos, usar notação científica
+                return value.toExponential(4);
+            }
         }
 
         // Concentração Comum: C = m / V
@@ -670,38 +725,41 @@
                     showResult('cc-result', '❌ Volume não pode ser zero!', false);
                     return;
                 }
-                const result = m / V;
+                const resultBase = m / V; // resultado em g/L
+                const resultDisplay = setCalculatedWithUnit('cc-conc', resultBase, 'cc-conc-unit');
+                const unitLabel = getUnitLabel('cc-conc-unit');
                 steps = [
                     `Fórmula: C = m / V`,
-                    `C = ${m} g / ${V} L`,
-                    `C = ${result.toPrecision(6)} g/L`
+                    `C = ${formatNumber(m)} g / ${formatNumber(V)} L`,
+                    `C = ${formatNumber(resultBase)} g/L = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('cc-conc', result);
-                showResult('cc-result', `✓ Concentração = ${result.toPrecision(6)} g/L`);
+                showResult('cc-result', `✓ Concentração = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else if (m === null) {
                 // m = C × V
-                const result = C * V;
+                const resultBase = C * V; // resultado em g
+                const resultDisplay = setCalculatedWithUnit('cc-massa', resultBase, 'cc-massa-unit');
+                const unitLabel = getUnitLabel('cc-massa-unit');
                 steps = [
                     `Fórmula: m = C × V`,
-                    `m = ${C} g/L × ${V} L`,
-                    `m = ${result.toPrecision(6)} g`
+                    `m = ${formatNumber(C)} g/L × ${formatNumber(V)} L`,
+                    `m = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('cc-massa', result);
-                showResult('cc-result', `✓ Massa = ${result.toPrecision(6)} g`);
+                showResult('cc-result', `✓ Massa = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
                 // V = m / C
                 if (C === 0) {
                     showResult('cc-result', '❌ Concentração não pode ser zero!', false);
                     return;
                 }
-                const result = m / C;
+                const resultBase = m / C; // resultado em L
+                const resultDisplay = setCalculatedWithUnit('cc-volume', resultBase, 'cc-volume-unit');
+                const unitLabel = getUnitLabel('cc-volume-unit');
                 steps = [
                     `Fórmula: V = m / C`,
-                    `V = ${m} g / ${C} g/L`,
-                    `V = ${result.toPrecision(6)} L`
+                    `V = ${formatNumber(m)} g / ${formatNumber(C)} g/L`,
+                    `V = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('cc-volume', result);
-                showResult('cc-result', `✓ Volume = ${result.toPrecision(6)} L`);
+                showResult('cc-result', `✓ Volume = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
             showSteps('cc-steps', steps);
         }
@@ -743,35 +801,37 @@
                 const result = m / (MM * V);
                 steps = [
                     `Fórmula: M = m / (MM × V)`,
-                    `M = ${m} g / (${MM} g/mol × ${V} L)`,
-                    `M = ${result.toPrecision(6)} mol/L`
+                    `M = ${formatNumber(m)} g / (${formatNumber(MM)} g/mol × ${formatNumber(V)} L)`,
+                    `M = ${formatNumber(result)} mol/L`
                 ];
                 setCalculated('m-molar', result);
-                showResult('m-result', `✓ Molaridade = ${result.toPrecision(6)} mol/L`);
+                showResult('m-result', `✓ Molaridade = ${formatNumber(result)} mol/L`);
             } else if (m === null) {
                 // m = M × MM × V
-                const result = M * MM * V;
+                const resultBase = M * MM * V; // resultado em g
+                const resultDisplay = setCalculatedWithUnit('m-massa', resultBase, 'm-massa-unit');
+                const unitLabel = getUnitLabel('m-massa-unit');
                 steps = [
                     `Fórmula: m = M × MM × V`,
-                    `m = ${M} mol/L × ${MM} g/mol × ${V} L`,
-                    `m = ${result.toPrecision(6)} g`
+                    `m = ${formatNumber(M)} mol/L × ${formatNumber(MM)} g/mol × ${formatNumber(V)} L`,
+                    `m = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('m-massa', result);
-                showResult('m-result', `✓ Massa = ${result.toPrecision(6)} g`);
+                showResult('m-result', `✓ Massa = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
                 // V = m / (M × MM)
                 if (M === 0) {
                     showResult('m-result', '❌ Molaridade não pode ser zero!', false);
                     return;
                 }
-                const result = m / (M * MM);
+                const resultBase = m / (M * MM); // resultado em L
+                const resultDisplay = setCalculatedWithUnit('m-volume', resultBase, 'm-volume-unit');
+                const unitLabel = getUnitLabel('m-volume-unit');
                 steps = [
                     `Fórmula: V = m / (M × MM)`,
-                    `V = ${m} g / (${M} mol/L × ${MM} g/mol)`,
-                    `V = ${result.toPrecision(6)} L`
+                    `V = ${formatNumber(m)} g / (${formatNumber(M)} mol/L × ${formatNumber(MM)} g/mol)`,
+                    `V = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('m-volume', result);
-                showResult('m-result', `✓ Volume = ${result.toPrecision(6)} L`);
+                showResult('m-result', `✓ Volume = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
             showSteps('m-steps', steps);
         }
@@ -825,9 +885,9 @@
             }
 
             let tipoTexto = tipo === 'mm' ? 'm/m' : (tipo === 'vv' ? 'v/v' : 'm/v');
-            let unidade1 = tipo === 'vv' ? 'mL' : 'g';
-            let unidade2 = tipo === 'mm' ? 'g' : 'mL';
-            if (tipo === 'mv') unidade2 = 'mL';
+            // Unidades base para os cálculos
+            let unidadeBase1 = tipo === 'vv' ? 'mL' : 'g';
+            let unidadeBase2 = tipo === 'mm' ? 'g' : 'mL';
             
             let steps = [];
 
@@ -840,35 +900,37 @@
                 const result = (val1 / val2) * 100;
                 steps = [
                     `Fórmula: % = (parte / total) × 100`,
-                    `% = (${val1} / ${val2}) × 100`,
-                    `% = ${result.toPrecision(6)} %`
+                    `% = (${formatNumber(val1)} ${unidadeBase1} / ${formatNumber(val2)} ${unidadeBase2}) × 100`,
+                    `% = ${formatNumber(result)} %`
                 ];
                 setCalculated('p-perc', result);
-                showResult('p-result', `✓ ${tipoTexto} = ${result.toPrecision(6)} %`);
+                showResult('p-result', `✓ ${tipoTexto} = ${formatNumber(result)} %`);
             } else if (val1 === null) {
                 // parte = (% × total) / 100
-                const result = (perc * val2) / 100;
+                const resultBase = (perc * val2) / 100; // resultado na unidade base
+                const resultDisplay = setCalculatedWithUnit('p-val1', resultBase, 'p-unit1');
+                const unitLabel = getUnitLabel('p-unit1');
                 steps = [
                     `Fórmula: parte = (% × total) / 100`,
-                    `parte = (${perc} × ${val2}) / 100`,
-                    `parte = ${result.toPrecision(6)} ${unidade1}`
+                    `parte = (${formatNumber(perc)} × ${formatNumber(val2)} ${unidadeBase2}) / 100`,
+                    `parte = ${formatNumber(resultBase)} ${unidadeBase1} = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('p-val1', result);
-                showResult('p-result', `✓ Parte = ${result.toPrecision(6)} ${unidade1}`);
+                showResult('p-result', `✓ Parte = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
                 // total = (parte × 100) / %
                 if (perc === 0) {
                     showResult('p-result', '❌ Porcentagem não pode ser zero!', false);
                     return;
                 }
-                const result = (val1 * 100) / perc;
+                const resultBase = (val1 * 100) / perc; // resultado na unidade base
+                const resultDisplay = setCalculatedWithUnit('p-val2', resultBase, 'p-unit2');
+                const unitLabel = getUnitLabel('p-unit2');
                 steps = [
                     `Fórmula: total = (parte × 100) / %`,
-                    `total = (${val1} × 100) / ${perc}`,
-                    `total = ${result.toPrecision(6)} ${unidade2}`
+                    `total = (${formatNumber(val1)} ${unidadeBase1} × 100) / ${formatNumber(perc)}`,
+                    `total = ${formatNumber(resultBase)} ${unidadeBase2} = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('p-val2', result);
-                showResult('p-result', `✓ Total = ${result.toPrecision(6)} ${unidade2}`);
+                showResult('p-result', `✓ Total = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
             showSteps('p-steps', steps);
         }
@@ -895,7 +957,7 @@
             let steps = [];
 
             if (d === null) {
-                // d = m / V
+                // d = m / V (resultado em g/mL)
                 if (V === 0) {
                     showResult('d-result', '❌ Volume não pode ser zero!', false);
                     return;
@@ -903,35 +965,37 @@
                 const result = m / V;
                 steps = [
                     `Fórmula: d = m / V`,
-                    `d = ${m} g / ${V} mL`,
-                    `d = ${result.toPrecision(6)} g/mL`
+                    `d = ${formatNumber(m)} g / ${formatNumber(V)} mL`,
+                    `d = ${formatNumber(result)} g/mL`
                 ];
                 setCalculated('d-dens', result);
-                showResult('d-result', `✓ Densidade = ${result.toPrecision(6)} g/mL`);
+                showResult('d-result', `✓ Densidade = ${formatNumber(result)} g/mL`);
             } else if (m === null) {
-                // m = d × V
-                const result = d * V;
+                // m = d × V (resultado em g)
+                const resultBase = d * V;
+                const resultDisplay = setCalculatedWithUnit('d-massa', resultBase, 'd-massa-unit');
+                const unitLabel = getUnitLabel('d-massa-unit');
                 steps = [
                     `Fórmula: m = d × V`,
-                    `m = ${d} g/mL × ${V} mL`,
-                    `m = ${result.toPrecision(6)} g`
+                    `m = ${formatNumber(d)} g/mL × ${formatNumber(V)} mL`,
+                    `m = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('d-massa', result);
-                showResult('d-result', `✓ Massa = ${result.toPrecision(6)} g`);
+                showResult('d-result', `✓ Massa = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // V = m / d
+                // V = m / d (resultado em mL)
                 if (d === 0) {
                     showResult('d-result', '❌ Densidade não pode ser zero!', false);
                     return;
                 }
-                const result = m / d;
+                const resultBase = m / d;
+                const resultDisplay = setCalculatedWithUnit('d-volume', resultBase, 'd-volume-unit');
+                const unitLabel = getUnitLabel('d-volume-unit');
                 steps = [
                     `Fórmula: V = m / d`,
-                    `V = ${m} g / ${d} g/mL`,
-                    `V = ${result.toPrecision(6)} mL`
+                    `V = ${formatNumber(m)} g / ${formatNumber(d)} g/mL`,
+                    `V = ${formatNumber(resultBase)} mL = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('d-volume', result);
-                showResult('d-result', `✓ Volume = ${result.toPrecision(6)} mL`);
+                showResult('d-result', `✓ Volume = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
             showSteps('d-steps', steps);
         }
@@ -967,12 +1031,12 @@
                 const x2 = 1 - result;
                 steps = [
                     `Fórmula: X₁ = n₁ / (n₁ + n₂)`,
-                    `X₁ = ${n1} / (${n1} + ${n2})`,
-                    `X₁ = ${result.toPrecision(6)}`,
-                    `X₂ = 1 - X₁ = ${x2.toPrecision(6)}`
+                    `X₁ = ${formatNumber(n1)} / (${formatNumber(n1)} + ${formatNumber(n2)})`,
+                    `X₁ = ${formatNumber(result)}`,
+                    `X₂ = 1 - X₁ = ${formatNumber(x2)}`
                 ];
                 setCalculated('f-x', result);
-                showResult('f-result', `✓ X₁ = ${result.toPrecision(6)} | X₂ = ${x2.toPrecision(6)}`);
+                showResult('f-result', `✓ X₁ = ${formatNumber(result)} | X₂ = ${formatNumber(x2)}`);
             } else if (n1 === null) {
                 // n1 = (X × n2) / (1 - X)
                 if (X >= 1) {
@@ -982,11 +1046,11 @@
                 const result = (X * n2) / (1 - X);
                 steps = [
                     `Fórmula: n₁ = (X₁ × n₂) / (1 - X₁)`,
-                    `n₁ = (${X} × ${n2}) / (1 - ${X})`,
-                    `n₁ = ${result.toPrecision(6)} mol`
+                    `n₁ = (${formatNumber(X)} × ${formatNumber(n2)}) / (1 - ${formatNumber(X)})`,
+                    `n₁ = ${formatNumber(result)} mol`
                 ];
                 setCalculated('f-n1', result);
-                showResult('f-result', `✓ n₁ = ${result.toPrecision(6)} mol`);
+                showResult('f-result', `✓ n₁ = ${formatNumber(result)} mol`);
             } else {
                 // n2 = n1 × (1 - X) / X
                 if (X === 0) {
@@ -996,11 +1060,11 @@
                 const result = n1 * (1 - X) / X;
                 steps = [
                     `Fórmula: n₂ = n₁ × (1 - X₁) / X₁`,
-                    `n₂ = ${n1} × (1 - ${X}) / ${X}`,
-                    `n₂ = ${result.toPrecision(6)} mol`
+                    `n₂ = ${formatNumber(n1)} × (1 - ${formatNumber(X)}) / ${formatNumber(X)}`,
+                    `n₂ = ${formatNumber(result)} mol`
                 ];
                 setCalculated('f-n2', result);
-                showResult('f-result', `✓ n₂ = ${result.toPrecision(6)} mol`);
+                showResult('f-result', `✓ n₂ = ${formatNumber(result)} mol`);
             }
             showSteps('f-steps', steps);
         }
@@ -1035,35 +1099,37 @@
                 const result = (soluto / solvente) * 100;
                 steps = [
                     `Fórmula: Cs = (soluto / solvente) × 100`,
-                    `Cs = (${soluto} g / ${solvente} g) × 100`,
-                    `Cs = ${result.toPrecision(6)} g/100g`
+                    `Cs = (${formatNumber(soluto)} g / ${formatNumber(solvente)} g) × 100`,
+                    `Cs = ${formatNumber(result)} g/100g`
                 ];
                 setCalculated('s-cs', result);
-                showResult('s-result', `✓ Cs = ${result.toPrecision(6)} g/100g de solvente`);
+                showResult('s-result', `✓ Cs = ${formatNumber(result)} g/100g de solvente`);
             } else if (soluto === null) {
-                // soluto = (Cs × solvente) / 100
-                const result = (Cs * solvente) / 100;
+                // soluto = (Cs × solvente) / 100 (resultado em g)
+                const resultBase = (Cs * solvente) / 100;
+                const resultDisplay = setCalculatedWithUnit('s-soluto', resultBase, 's-soluto-unit');
+                const unitLabel = getUnitLabel('s-soluto-unit');
                 steps = [
                     `Fórmula: soluto = (Cs × solvente) / 100`,
-                    `soluto = (${Cs} × ${solvente}) / 100`,
-                    `soluto = ${result.toPrecision(6)} g`
+                    `soluto = (${formatNumber(Cs)} × ${formatNumber(solvente)} g) / 100`,
+                    `soluto = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('s-soluto', result);
-                showResult('s-result', `✓ Massa de soluto = ${result.toPrecision(6)} g`);
+                showResult('s-result', `✓ Massa de soluto = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // solvente = (soluto × 100) / Cs
+                // solvente = (soluto × 100) / Cs (resultado em g)
                 if (Cs === 0) {
                     showResult('s-result', '❌ Coeficiente não pode ser zero!', false);
                     return;
                 }
-                const result = (soluto * 100) / Cs;
+                const resultBase = (soluto * 100) / Cs;
+                const resultDisplay = setCalculatedWithUnit('s-solvente', resultBase, 's-solvente-unit');
+                const unitLabel = getUnitLabel('s-solvente-unit');
                 steps = [
                     `Fórmula: solvente = (soluto × 100) / Cs`,
-                    `solvente = (${soluto} × 100) / ${Cs}`,
-                    `solvente = ${result.toPrecision(6)} g`
+                    `solvente = (${formatNumber(soluto)} g × 100) / ${formatNumber(Cs)}`,
+                    `solvente = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('s-solvente', result);
-                showResult('s-result', `✓ Massa de solvente = ${result.toPrecision(6)} g`);
+                showResult('s-result', `✓ Massa de solvente = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
             showSteps('s-steps', steps);
         }
@@ -1091,67 +1157,308 @@
             let steps = [];
 
             if (C1 === null) {
-                // C1 = (C2 × V2) / V1
+                // C1 = (C2 × V2) / V1 (concentração, sem conversão de unidade específica)
                 if (V1 === 0) {
                     showResult('dil-result', '❌ V₁ não pode ser zero!', false);
                     return;
                 }
-                const result = (C2 * V2) / V1;
+                const resultBase = (C2 * V2) / V1;
+                const resultDisplay = setCalculatedWithUnit('dil-c1', resultBase, 'dil-c1-unit');
+                const unitLabel = getUnitLabel('dil-c1-unit');
                 steps = [
                     `Fórmula: C₁ = (C₂ × V₂) / V₁`,
-                    `C₁ = (${C2} × ${V2}) / ${V1}`,
-                    `C₁ = ${result.toPrecision(6)}`
+                    `C₁ = (${formatNumber(C2)} × ${formatNumber(V2)} L) / ${formatNumber(V1)} L`,
+                    `C₁ = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('dil-c1', result);
-                showResult('dil-result', `✓ C₁ = ${result.toPrecision(6)}`);
+                showResult('dil-result', `✓ C₁ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else if (V1 === null) {
-                // V1 = (C2 × V2) / C1
+                // V1 = (C2 × V2) / C1 (resultado em L)
                 if (C1 === 0) {
                     showResult('dil-result', '❌ C₁ não pode ser zero!', false);
                     return;
                 }
-                const result = (C2 * V2) / C1;
+                const resultBase = (C2 * V2) / C1;
+                const resultDisplay = setCalculatedWithUnit('dil-v1', resultBase, 'dil-v1-unit');
+                const unitLabel = getUnitLabel('dil-v1-unit');
                 steps = [
                     `Fórmula: V₁ = (C₂ × V₂) / C₁`,
-                    `V₁ = (${C2} × ${V2}) / ${C1}`,
-                    `V₁ = ${result.toPrecision(6)} L`
+                    `V₁ = (${formatNumber(C2)} × ${formatNumber(V2)} L) / ${formatNumber(C1)}`,
+                    `V₁ = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('dil-v1', result);
-                showResult('dil-result', `✓ V₁ = ${result.toPrecision(6)} L`);
+                showResult('dil-result', `✓ V₁ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else if (C2 === null) {
-                // C2 = (C1 × V1) / V2
+                // C2 = (C1 × V1) / V2 (concentração)
                 if (V2 === 0) {
                     showResult('dil-result', '❌ V₂ não pode ser zero!', false);
                     return;
                 }
-                const result = (C1 * V1) / V2;
+                const resultBase = (C1 * V1) / V2;
+                const resultDisplay = setCalculatedWithUnit('dil-c2', resultBase, 'dil-c2-unit');
+                const unitLabel = getUnitLabel('dil-c2-unit');
                 steps = [
                     `Fórmula: C₂ = (C₁ × V₁) / V₂`,
-                    `C₂ = (${C1} × ${V1}) / ${V2}`,
-                    `C₂ = ${result.toPrecision(6)}`
+                    `C₂ = (${formatNumber(C1)} × ${formatNumber(V1)} L) / ${formatNumber(V2)} L`,
+                    `C₂ = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('dil-c2', result);
-                showResult('dil-result', `✓ C₂ = ${result.toPrecision(6)}`);
+                showResult('dil-result', `✓ C₂ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // V2 = (C1 × V1) / C2
+                // V2 = (C1 × V1) / C2 (resultado em L)
                 if (C2 === 0) {
                     showResult('dil-result', '❌ C₂ não pode ser zero!', false);
                     return;
                 }
-                const result = (C1 * V1) / C2;
+                const resultBase = (C1 * V1) / C2;
+                const resultDisplay = setCalculatedWithUnit('dil-v2', resultBase, 'dil-v2-unit');
+                const unitLabel = getUnitLabel('dil-v2-unit');
                 steps = [
                     `Fórmula: V₂ = (C₁ × V₁) / C₂`,
-                    `V₂ = (${C1} × ${V1}) / ${C2}`,
-                    `V₂ = ${result.toPrecision(6)} L`
+                    `V₂ = (${formatNumber(C1)} × ${formatNumber(V1)} L) / ${formatNumber(C2)}`,
+                    `V₂ = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
                 ];
-                setCalculated('dil-v2', result);
-                showResult('dil-result', `✓ V₂ = ${result.toPrecision(6)} L`);
+                showResult('dil-result', `✓ V₂ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
             showSteps('dil-steps', steps);
         }
 
+        // Tabela de Massas Atômicas
+        const elementosMassas = {
+            'H': { nome: 'Hidrogênio', massa: 1.008 },
+            'He': { nome: 'Hélio', massa: 4.003 },
+            'Li': { nome: 'Lítio', massa: 6.941 },
+            'Be': { nome: 'Berílio', massa: 9.012 },
+            'B': { nome: 'Boro', massa: 10.81 },
+            'C': { nome: 'Carbono', massa: 12.01 },
+            'N': { nome: 'Nitrogênio', massa: 14.01 },
+            'O': { nome: 'Oxigênio', massa: 16.00 },
+            'F': { nome: 'Flúor', massa: 19.00 },
+            'Ne': { nome: 'Neônio', massa: 20.18 },
+            'Na': { nome: 'Sódio', massa: 22.99 },
+            'Mg': { nome: 'Magnésio', massa: 24.31 },
+            'Al': { nome: 'Alumínio', massa: 26.98 },
+            'Si': { nome: 'Silício', massa: 28.09 },
+            'P': { nome: 'Fósforo', massa: 30.97 },
+            'S': { nome: 'Enxofre', massa: 32.07 },
+            'Cl': { nome: 'Cloro', massa: 35.45 },
+            'Ar': { nome: 'Argônio', massa: 39.95 },
+            'K': { nome: 'Potássio', massa: 39.10 },
+            'Ca': { nome: 'Cálcio', massa: 40.08 },
+            'Sc': { nome: 'Escândio', massa: 44.96 },
+            'Ti': { nome: 'Titânio', massa: 47.87 },
+            'V': { nome: 'Vanádio', massa: 50.94 },
+            'Cr': { nome: 'Cromo', massa: 52.00 },
+            'Mn': { nome: 'Manganês', massa: 54.94 },
+            'Fe': { nome: 'Ferro', massa: 55.85 },
+            'Co': { nome: 'Cobalto', massa: 58.93 },
+            'Ni': { nome: 'Níquel', massa: 58.69 },
+            'Cu': { nome: 'Cobre', massa: 63.55 },
+            'Zn': { nome: 'Zinco', massa: 65.38 },
+            'Ga': { nome: 'Gálio', massa: 69.72 },
+            'Ge': { nome: 'Germânio', massa: 72.63 },
+            'As': { nome: 'Arsênio', massa: 74.92 },
+            'Se': { nome: 'Selênio', massa: 78.97 },
+            'Br': { nome: 'Bromo', massa: 79.90 },
+            'Kr': { nome: 'Criptônio', massa: 83.80 },
+            'Rb': { nome: 'Rubídio', massa: 85.47 },
+            'Sr': { nome: 'Estrôncio', massa: 87.62 },
+            'Y': { nome: 'Ítrio', massa: 88.91 },
+            'Zr': { nome: 'Zircônio', massa: 91.22 },
+            'Nb': { nome: 'Nióbio', massa: 92.91 },
+            'Mo': { nome: 'Molibdênio', massa: 95.95 },
+            'Ru': { nome: 'Rutênio', massa: 101.1 },
+            'Rh': { nome: 'Ródio', massa: 102.9 },
+            'Pd': { nome: 'Paládio', massa: 106.4 },
+            'Ag': { nome: 'Prata', massa: 107.9 },
+            'Cd': { nome: 'Cádmio', massa: 112.4 },
+            'In': { nome: 'Índio', massa: 114.8 },
+            'Sn': { nome: 'Estanho', massa: 118.7 },
+            'Sb': { nome: 'Antimônio', massa: 121.8 },
+            'Te': { nome: 'Telúrio', massa: 127.6 },
+            'I': { nome: 'Iodo', massa: 126.9 },
+            'Xe': { nome: 'Xenônio', massa: 131.3 },
+            'Cs': { nome: 'Césio', massa: 132.9 },
+            'Ba': { nome: 'Bário', massa: 137.3 },
+            'La': { nome: 'Lantânio', massa: 138.9 },
+            'Ce': { nome: 'Cério', massa: 140.1 },
+            'Pr': { nome: 'Praseodímio', massa: 140.9 },
+            'Nd': { nome: 'Neodímio', massa: 144.2 },
+            'Pm': { nome: 'Promécio', massa: 145.0 },
+            'Sm': { nome: 'Samário', massa: 150.4 },
+            'Eu': { nome: 'Európio', massa: 152.0 },
+            'Gd': { nome: 'Gadolínio', massa: 157.3 },
+            'Tb': { nome: 'Térbio', massa: 158.9 },
+            'Dy': { nome: 'Disprósio', massa: 162.5 },
+            'Ho': { nome: 'Hólmio', massa: 164.9 },
+            'Er': { nome: 'Érbio', massa: 167.3 },
+            'Tm': { nome: 'Túlio', massa: 168.9 },
+            'Yb': { nome: 'Itérbio', massa: 173.0 },
+            'Lu': { nome: 'Lutécio', massa: 175.0 },
+            'Hf': { nome: 'Háfnio', massa: 178.5 },
+            'Ta': { nome: 'Tântalo', massa: 180.9 },
+            'W': { nome: 'Tungstênio', massa: 183.8 },
+            'Re': { nome: 'Rênio', massa: 186.2 },
+            'Os': { nome: 'Ósmio', massa: 190.2 },
+            'Ir': { nome: 'Irídio', massa: 192.2 },
+            'Pt': { nome: 'Platina', massa: 195.1 },
+            'Au': { nome: 'Ouro', massa: 197.0 },
+            'Hg': { nome: 'Mercúrio', massa: 200.6 },
+            'Tl': { nome: 'Tálio', massa: 204.4 },
+            'Pb': { nome: 'Chumbo', massa: 207.2 },
+            'Bi': { nome: 'Bismuto', massa: 209.0 },
+            'Po': { nome: 'Polônio', massa: 209.0 },
+            'At': { nome: 'Astato', massa: 210.0 },
+            'Rn': { nome: 'Radônio', massa: 222.0 },
+            'Fr': { nome: 'Frâncio', massa: 223.0 },
+            'Ra': { nome: 'Rádio', massa: 226.0 },
+            'Ac': { nome: 'Actínio', massa: 227.0 },
+            'Th': { nome: 'Tório', massa: 232.0 },
+            'Pa': { nome: 'Protactínio', massa: 231.0 },
+            'U': { nome: 'Urânio', massa: 238.0 }
+        };
+
+        // Parser de fórmulas químicas
+        function parseFormula(formula) {
+            const elementos = {};
+            
+            function parseGroup(str, multiplier = 1) {
+                let i = 0;
+                while (i < str.length) {
+                    if (str[i] === '(') {
+                        // Encontrar o parêntese de fechamento
+                        let depth = 1;
+                        let j = i + 1;
+                        while (j < str.length && depth > 0) {
+                            if (str[j] === '(') depth++;
+                            if (str[j] === ')') depth--;
+                            j++;
+                        }
+                        // j agora aponta para depois do ')'
+                        const groupContent = str.substring(i + 1, j - 1);
+                        
+                        // Verificar se há número após o parêntese
+                        let numStr = '';
+                        while (j < str.length && /\d/.test(str[j])) {
+                            numStr += str[j];
+                            j++;
+                        }
+                        const groupMultiplier = numStr ? parseInt(numStr) : 1;
+                        
+                        parseGroup(groupContent, multiplier * groupMultiplier);
+                        i = j;
+                    } else if (/[A-Z]/.test(str[i])) {
+                        // Elemento
+                        let element = str[i];
+                        i++;
+                        
+                        // Verificar se há letra minúscula (símbolo de 2 letras)
+                        while (i < str.length && /[a-z]/.test(str[i])) {
+                            element += str[i];
+                            i++;
+                        }
+                        
+                        // Verificar número
+                        let numStr = '';
+                        while (i < str.length && /\d/.test(str[i])) {
+                            numStr += str[i];
+                            i++;
+                        }
+                        const count = numStr ? parseInt(numStr) : 1;
+                        
+                        if (elementos[element]) {
+                            elementos[element] += count * multiplier;
+                        } else {
+                            elementos[element] = count * multiplier;
+                        }
+                    } else {
+                        i++;
+                    }
+                }
+            }
+            
+            parseGroup(formula);
+            return elementos;
+        }
+
+        // Calcular Massa Molar
+        function calcMassaMolar() {
+            const formula = document.getElementById('mm-formula').value.trim();
+            
+            if (!formula) {
+                showResult('mm-result', '❌ Digite uma fórmula química!', false);
+                hideSteps('mm-steps');
+                return;
+            }
+            
+            try {
+                const elementos = parseFormula(formula);
+                const elementosKeys = Object.keys(elementos);
+                
+                if (elementosKeys.length === 0) {
+                    showResult('mm-result', '❌ Fórmula inválida!', false);
+                    hideSteps('mm-steps');
+                    return;
+                }
+                
+                let massaTotal = 0;
+                let steps = [];
+                let detalhes = [];
+                
+                steps.push(`Fórmula: ${formula}`);
+                steps.push(`Elementos encontrados:`);
+                
+                for (const elem of elementosKeys) {
+                    if (!elementosMassas[elem]) {
+                        showResult('mm-result', `❌ Elemento "${elem}" não encontrado na tabela!`, false);
+                        hideSteps('mm-steps');
+                        return;
+                    }
+                    
+                    const info = elementosMassas[elem];
+                    const quantidade = elementos[elem];
+                    const massaElemento = info.massa * quantidade;
+                    massaTotal += massaElemento;
+                    
+                    detalhes.push({
+                        simbolo: elem,
+                        nome: info.nome,
+                        massa: info.massa,
+                        quantidade: quantidade,
+                        total: massaElemento
+                    });
+                    
+                    steps.push(`• ${elem} (${info.nome}): ${info.massa} g/mol × ${quantidade} = ${massaElemento.toFixed(3)} g/mol`);
+                }
+                
+                steps.push(`<strong>Massa Molar Total = ${massaTotal.toFixed(3)} g/mol</strong>`);
+                
+                showResult('mm-result', `✓ Massa Molar de ${formula} = ${massaTotal.toFixed(3)} g/mol`);
+                showSteps('mm-steps', steps);
+                
+            } catch (e) {
+                showResult('mm-result', '❌ Erro ao processar a fórmula. Verifique a sintaxe!', false);
+                hideSteps('mm-steps');
+            }
+        }
+
+        function clearMassaMolar() {
+            document.getElementById('mm-formula').value = '';
+            document.getElementById('mm-result').classList.remove('show');
+            document.getElementById('mm-steps').style.display = 'none';
+        }
+
+        // Mostrar lista de elementos disponíveis
+        function mostrarElementos() {
+            const lista = document.getElementById('elementos-lista');
+            if (lista) {
+                const elementosArray = Object.entries(elementosMassas).map(([simbolo, info]) => 
+                    `<span style="display: inline-block; margin: 2px 5px; padding: 2px 6px; background: #e8f5e9; border-radius: 4px;"><strong>${simbolo}</strong>: ${info.massa}</span>`
+                );
+                lista.innerHTML = elementosArray.join('');
+            }
+        }
+
         // Inicialização
         updatePorcentagemLabels();
+        mostrarElementos();
     </script>
 </body>
 </html>
