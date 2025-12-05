@@ -174,7 +174,7 @@
         }
 
         .result.success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
         }
 
         .result.error {
@@ -240,6 +240,350 @@
             padding-left: 10px;
             border-left: 2px solid #667eea;
         }
+
+        .btn-desenvolvimento {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-desenvolvimento:hover {
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-desenvolvimento.show {
+            display: block;
+        }
+
+        /* Modal/Popup */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeInOverlay 0.3s ease;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideInModal 0.3s ease;
+        }
+
+        @keyframes slideInModal {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .desenvolvimento-step {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .desenvolvimento-step:last-child {
+            border-left-color: #38ef7d;
+            background: #e8f5e9;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-formula {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            margin: 8px 0;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .step-formula.highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+
+        .step-description {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Botão de Ajuda (?) */
+        .formula-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .formula-content {
+            flex: 1;
+        }
+
+        .btn-ajuda {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-ajuda:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Modal de Ajuda */
+        .modal-ajuda-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-ajuda-overlay.show {
+            display: flex;
+            animation: fadeInOverlay 0.3s ease;
+        }
+
+        .modal-ajuda-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 550px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideInModal 0.3s ease;
+        }
+
+        .modal-ajuda-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-ajuda-header h2 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-ajuda-body {
+            padding: 25px;
+        }
+
+        .ajuda-secao {
+            margin-bottom: 20px;
+        }
+
+        .ajuda-secao:last-child {
+            margin-bottom: 0;
+        }
+
+        .ajuda-titulo {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ajuda-texto {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .ajuda-formula-destaque {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .ajuda-exemplo {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .ajuda-exemplo-titulo {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .ajuda-exemplo-texto {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .ajuda-dica {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 12px 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #795548;
+        }
+
+        .ajuda-variaveis {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 15px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .ajuda-var {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .ajuda-var-desc {
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -251,7 +595,7 @@
 
         <div class="tabs">
             <button class="tab active" onclick="showTab('conc-comum')">C (g/L)</button>
-            <button class="tab" onclick="showTab('molar')">Molar</button>
+            <button class="tab" onclick="showTab('molar')">Conc. Molar</button>
             <button class="tab" onclick="showTab('porcentagem')">%</button>
             <button class="tab" onclick="showTab('densidade')">Densidade</button>
             <button class="tab" onclick="showTab('fracao')">Fração</button>
@@ -264,8 +608,13 @@
             <!-- Concentração Comum -->
             <div class="calc-section active" id="conc-comum">
                 <div class="formula">
+                    <div class="formula-container">
+                        <div class="formula-content">
                     <div class="formula-title">Fórmula</div>
                     <div class="formula-text">C = m₁ / V (g/L)</div>
+                        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('conc-comum')" title="O que é isso?">?</button>
+                    </div>
                 </div>
                 <div class="info tip">
                     💡 Deixe EM BRANCO o valor que deseja calcular!
@@ -306,14 +655,19 @@
                 <button onclick="calcConcComum()">Calcular</button>
                 <button class="clear-btn" onclick="clearFields('cc')">Limpar</button>
                 <div class="result" id="cc-result"></div>
-                <div class="calculation-steps" id="cc-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="cc-btn-dev" onclick="showDesenvolvimento('cc')">📐 Ver Desenvolvimento</button>
             </div>
 
             <!-- Concentração Molar -->
             <div class="calc-section" id="molar">
                 <div class="formula">
+                    <div class="formula-container">
+                        <div class="formula-content">
                     <div class="formula-title">Fórmula</div>
                     <div class="formula-text">M = n / V = m / (MM × V) (mol/L)</div>
+                        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('molar')" title="O que é isso?">?</button>
+                    </div>
                 </div>
                 <div class="info tip">
                     💡 Deixe EM BRANCO o valor que deseja calcular!
@@ -356,11 +710,20 @@
                 <button onclick="calcMolar()">Calcular</button>
                 <button class="clear-btn" onclick="clearFields('m')">Limpar</button>
                 <div class="result" id="m-result"></div>
-                <div class="calculation-steps" id="m-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="m-btn-dev" onclick="showDesenvolvimento('m')">📐 Ver Desenvolvimento</button>
             </div>
 
             <!-- Porcentagem -->
             <div class="calc-section" id="porcentagem">
+                <div class="formula">
+                    <div class="formula-container">
+                        <div class="formula-content">
+                            <div class="formula-title">Fórmula</div>
+                            <div class="formula-text">% = (parte / total) × 100</div>
+                        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('porcentagem')" title="O que é isso?">?</button>
+                    </div>
+                </div>
                 <div class="info tip">
                     💡 Deixe EM BRANCO o valor que deseja calcular!
                 </div>
@@ -406,14 +769,19 @@
                 <button onclick="calcPorcentagem()">Calcular</button>
                 <button class="clear-btn" onclick="clearFields('p')">Limpar</button>
                 <div class="result" id="p-result"></div>
-                <div class="calculation-steps" id="p-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="p-btn-dev" onclick="showDesenvolvimento('p')">📐 Ver Desenvolvimento</button>
             </div>
 
             <!-- Densidade -->
             <div class="calc-section" id="densidade">
                 <div class="formula">
+                    <div class="formula-container">
+                        <div class="formula-content">
                     <div class="formula-title">Fórmula</div>
                     <div class="formula-text">d = m / V</div>
+                        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('densidade')" title="O que é isso?">?</button>
+                    </div>
                 </div>
                 <div class="info tip">
                     💡 Deixe EM BRANCO o valor que deseja calcular!
@@ -450,14 +818,19 @@
                 <button onclick="calcDensidade()">Calcular</button>
                 <button class="clear-btn" onclick="clearFields('d')">Limpar</button>
                 <div class="result" id="d-result"></div>
-                <div class="calculation-steps" id="d-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="d-btn-dev" onclick="showDesenvolvimento('d')">📐 Ver Desenvolvimento</button>
             </div>
 
             <!-- Fração Molar -->
             <div class="calc-section" id="fracao">
                 <div class="formula">
+                    <div class="formula-container">
+                        <div class="formula-content">
                     <div class="formula-title">Fórmula</div>
                     <div class="formula-text">X₁ = n₁ / (n₁ + n₂)</div>
+                        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('fracao')" title="O que é isso?">?</button>
+                    </div>
                 </div>
                 <div class="info tip">
                     💡 Deixe EM BRANCO o valor que deseja calcular!
@@ -477,14 +850,19 @@
                 <button onclick="calcFracaoMolar()">Calcular</button>
                 <button class="clear-btn" onclick="clearFields('f')">Limpar</button>
                 <div class="result" id="f-result"></div>
-                <div class="calculation-steps" id="f-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="f-btn-dev" onclick="showDesenvolvimento('f')">📐 Ver Desenvolvimento</button>
             </div>
 
             <!-- Coeficiente de Solubilidade -->
             <div class="calc-section" id="solubilidade">
                 <div class="formula">
+                    <div class="formula-container">
+                        <div class="formula-content">
                     <div class="formula-title">Fórmula</div>
                     <div class="formula-text">Cs = (massa soluto / massa solvente) × 100</div>
+                        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('solubilidade')" title="O que é isso?">?</button>
+                    </div>
                 </div>
                 <div class="info tip">
                     💡 Deixe EM BRANCO o valor que deseja calcular!
@@ -519,14 +897,19 @@
                 <button onclick="calcSolubilidade()">Calcular</button>
                 <button class="clear-btn" onclick="clearFields('s')">Limpar</button>
                 <div class="result" id="s-result"></div>
-                <div class="calculation-steps" id="s-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="s-btn-dev" onclick="showDesenvolvimento('s')">📐 Ver Desenvolvimento</button>
             </div>
 
             <!-- Diluição -->
             <div class="calc-section" id="diluicao">
                 <div class="formula">
+                    <div class="formula-container">
+                        <div class="formula-content">
                     <div class="formula-title">Fórmula</div>
                     <div class="formula-text">C₁ × V₁ = C₂ × V₂</div>
+                        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('diluicao')" title="O que é isso?">?</button>
+                    </div>
                 </div>
                 <div class="info tip">
                     💡 Deixe EM BRANCO o valor que deseja calcular!
@@ -574,14 +957,19 @@
                 <button onclick="calcDiluicao()">Calcular</button>
                 <button class="clear-btn" onclick="clearFields('dil')">Limpar</button>
                 <div class="result" id="dil-result"></div>
-                <div class="calculation-steps" id="dil-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="dil-btn-dev" onclick="showDesenvolvimento('dil')">📐 Ver Desenvolvimento</button>
             </div>
 
             <!-- Massa Molar -->
             <div class="calc-section" id="massa-molar">
                 <div class="formula">
-                    <div class="formula-title">Calculadora de Massa Molar</div>
-                    <div class="formula-text">MM = Σ (massa atômica × quantidade)</div>
+                    <div class="formula-container">
+                        <div class="formula-content">
+                            <div class="formula-title">Calculadora de Massa Molar</div>
+                            <div class="formula-text">MM = Σ (massa atômica × quantidade)</div>
+        </div>
+                        <button class="btn-ajuda" onclick="showAjuda('massa-molar')" title="O que é isso?">?</button>
+                    </div>
                 </div>
                 <div class="info">
                     ⚗️ Digite a fórmula química do composto (ex: H2O, NaCl, H2SO4, Ca(OH)2)
@@ -593,12 +981,38 @@
                 <button onclick="calcMassaMolar()">Calcular Massa Molar</button>
                 <button class="clear-btn" onclick="clearMassaMolar()">Limpar</button>
                 <div class="result" id="mm-result"></div>
-                <div class="calculation-steps" id="mm-steps" style="display:none;"></div>
+                <button class="btn-desenvolvimento" id="mm-btn-dev" onclick="showDesenvolvimento('mm')">📐 Ver Desenvolvimento</button>
                 
                 <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px;">
                     <div style="font-weight: 600; color: #667eea; margin-bottom: 10px;">📋 Elementos Disponíveis:</div>
                     <div id="elementos-lista" style="font-size: 12px; color: #555; line-height: 1.8; max-height: 200px; overflow-y: auto;"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda -->
+    <div class="modal-ajuda-overlay" id="modal-ajuda" onclick="closeModalAjudaOutside(event)">
+        <div class="modal-ajuda-content" onclick="event.stopPropagation()">
+            <div class="modal-ajuda-header">
+                <h2>❓ <span id="modal-ajuda-titulo">Ajuda</span></h2>
+                <button class="modal-close" onclick="closeModalAjuda()">&times;</button>
+            </div>
+            <div class="modal-ajuda-body" id="modal-ajuda-body">
+                <!-- Conteúdo da ajuda será inserido aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Desenvolvimento -->
+    <div class="modal-overlay" id="modal-desenvolvimento" onclick="closeModalOutside(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>📐 Desenvolvimento do Cálculo</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+                <!-- Conteúdo do desenvolvimento será inserido aqui -->
             </div>
         </div>
     </div>
@@ -615,22 +1029,467 @@
             document.getElementById(tabId).classList.add('active');
         }
 
+        // Armazena os dados de desenvolvimento de cada cálculo
+        let desenvolvimentoData = {};
+
+        // Conteúdos de Ajuda Didática
+        const ajudaConteudos = {
+            'conc-comum': {
+                titulo: 'Concentração Comum (g/L)',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            A <strong>concentração comum</strong> (também chamada de concentração em massa) indica 
+                            <strong>quantos gramas de soluto</strong> estão dissolvidos em <strong>cada litro de solução</strong>.
+                            É como perguntar: "Quanto de substância tem em cada litro?"
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">C = m₁ / V</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">🔤 O que cada letra significa?</div>
+                        <div class="ajuda-variaveis">
+                            <span class="ajuda-var">C</span>
+                            <span class="ajuda-var-desc">Concentração (em g/L) - o que queremos descobrir ou já sabemos</span>
+                            <span class="ajuda-var">m₁</span>
+                            <span class="ajuda-var-desc">Massa do soluto (em gramas) - a substância que foi dissolvida</span>
+                            <span class="ajuda-var">V</span>
+                            <span class="ajuda-var-desc">Volume da solução (em litros) - o volume total após misturar</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo do dia a dia:</div>
+                        <div class="ajuda-exemplo-texto">
+                            Imagine que você dissolve <strong>20g de açúcar</strong> em água até completar <strong>500mL de solução</strong>.<br><br>
+                            Convertendo: 500 mL = 0,5 L<br>
+                            C = 20g / 0,5L = <strong>40 g/L</strong><br><br>
+                            Isso significa que cada litro dessa solução contém 40g de açúcar!
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>Dica:</strong> Soluto é o que dissolve (açúcar, sal), solvente é onde dissolve (geralmente água), 
+                        e solução é a mistura dos dois!
+                    </div>
+                `
+            },
+            'molar': {
+                titulo: 'Concentração Molar (mol/L)',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            A <strong>concentração molar</strong> (ou molaridade) indica <strong>quantos mols de soluto</strong> 
+                            estão presentes em <strong>cada litro de solução</strong>. É a unidade mais usada em laboratórios 
+                            porque facilita os cálculos de reações químicas.
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">M = n / V = m / (MM × V)</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">🔤 O que cada letra significa?</div>
+                        <div class="ajuda-variaveis">
+                            <span class="ajuda-var">M</span>
+                            <span class="ajuda-var-desc">Molaridade (em mol/L) - concentração em quantidade de matéria</span>
+                            <span class="ajuda-var">n</span>
+                            <span class="ajuda-var-desc">Número de mols do soluto</span>
+                            <span class="ajuda-var">m</span>
+                            <span class="ajuda-var-desc">Massa do soluto (em gramas)</span>
+                            <span class="ajuda-var">MM</span>
+                            <span class="ajuda-var-desc">Massa molar do soluto (em g/mol) - soma das massas atômicas</span>
+                            <span class="ajuda-var">V</span>
+                            <span class="ajuda-var-desc">Volume da solução (em litros)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo prático:</div>
+                        <div class="ajuda-exemplo-texto">
+                            Dissolvemos <strong>40g de NaOH</strong> (MM = 40 g/mol) em água até <strong>2 litros</strong>.<br><br>
+                            M = 40g / (40 g/mol × 2L) = 40 / 80 = <strong>0,5 mol/L</strong><br><br>
+                            Ou seja: cada litro contém 0,5 mol de NaOH (meio mol por litro).
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>O que é mol?</strong> É uma quantidade fixa de partículas (6,02 × 10²³). 
+                        Assim como "dúzia" significa 12, "mol" significa 602 sextilhões de partículas!
+                    </div>
+                `
+            },
+            'porcentagem': {
+                titulo: 'Concentração em Porcentagem (%)',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            A <strong>concentração percentual</strong> indica quanto de soluto existe em relação ao 
+                            total, expressa em <strong>porcentagem</strong>. Existem três tipos:
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">% = (parte / total) × 100</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📊 Os três tipos:</div>
+                        <div class="ajuda-variaveis">
+                            <span class="ajuda-var">m/m %</span>
+                            <span class="ajuda-var-desc">Massa/Massa - gramas de soluto em 100g de solução</span>
+                            <span class="ajuda-var">v/v %</span>
+                            <span class="ajuda-var-desc">Volume/Volume - mL de soluto em 100mL de solução</span>
+                            <span class="ajuda-var">m/v %</span>
+                            <span class="ajuda-var-desc">Massa/Volume - gramas de soluto em 100mL de solução</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo do dia a dia:</div>
+                        <div class="ajuda-exemplo-texto">
+                            <strong>Soro fisiológico 0,9%</strong> significa que em cada 100mL de soro, 
+                            existem 0,9g de NaCl (sal).<br><br>
+                            <strong>Álcool 70%</strong> significa que em cada 100mL, 70mL são álcool 
+                            e 30mL são água (v/v).<br><br>
+                            <strong>Leite integral ≈3,5%</strong> de gordura significa 3,5g de gordura 
+                            para cada 100g de leite (m/m).
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>Dica:</strong> Olhe os rótulos! Produtos como cremes, medicamentos e alimentos 
+                        sempre indicam concentrações em porcentagem.
+                    </div>
+                `
+            },
+            'densidade': {
+                titulo: 'Densidade (g/mL)',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            A <strong>densidade</strong> indica <strong>quanta massa</strong> existe em um 
+                            <strong>determinado volume</strong>. É como perguntar: "Esse material é pesado ou leve 
+                            para o seu tamanho?"
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">d = m / V</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">🔤 O que cada letra significa?</div>
+                        <div class="ajuda-variaveis">
+                            <span class="ajuda-var">d</span>
+                            <span class="ajuda-var-desc">Densidade (em g/mL ou g/cm³)</span>
+                            <span class="ajuda-var">m</span>
+                            <span class="ajuda-var-desc">Massa (em gramas)</span>
+                            <span class="ajuda-var">V</span>
+                            <span class="ajuda-var-desc">Volume (em mL ou cm³)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplos comparativos:</div>
+                        <div class="ajuda-exemplo-texto">
+                            <strong>Água:</strong> d = 1 g/mL (1 litro pesa 1 kg)<br>
+                            <strong>Óleo:</strong> d ≈ 0,9 g/mL (mais leve que água, por isso flutua!)<br>
+                            <strong>Mercúrio:</strong> d = 13,6 g/mL (muito denso, metais afundam nele)<br>
+                            <strong>Ferro:</strong> d = 7,87 g/cm³<br><br>
+                            Por que o gelo flutua? Porque a densidade do gelo (0,92 g/mL) é menor que da água líquida!
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>Macete:</strong> Se a densidade é maior que 1 g/mL, o objeto afunda na água. 
+                        Se for menor que 1, ele flutua!
+                    </div>
+                `
+            },
+            'fracao': {
+                titulo: 'Fração Molar',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            A <strong>fração molar</strong> indica a <strong>proporção</strong> de mols de um 
+                            componente em relação ao <strong>total de mols</strong> da solução. É um número 
+                            entre 0 e 1 (ou 0% a 100%).
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">X₁ = n₁ / (n₁ + n₂)</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">🔤 O que cada letra significa?</div>
+                        <div class="ajuda-variaveis">
+                            <span class="ajuda-var">X₁</span>
+                            <span class="ajuda-var-desc">Fração molar do soluto (valor entre 0 e 1)</span>
+                            <span class="ajuda-var">n₁</span>
+                            <span class="ajuda-var-desc">Número de mols do soluto</span>
+                            <span class="ajuda-var">n₂</span>
+                            <span class="ajuda-var-desc">Número de mols do solvente</span>
+                            <span class="ajuda-var">X₂</span>
+                            <span class="ajuda-var-desc">Fração molar do solvente (X₂ = 1 - X₁)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo:</div>
+                        <div class="ajuda-exemplo-texto">
+                            Misturamos <strong>1 mol de açúcar</strong> com <strong>4 mols de água</strong>.<br><br>
+                            X(açúcar) = 1 / (1 + 4) = 1/5 = <strong>0,2</strong> (ou 20%)<br>
+                            X(água) = 4 / (1 + 4) = 4/5 = <strong>0,8</strong> (ou 80%)<br><br>
+                            Note que: 0,2 + 0,8 = 1 (as frações sempre somam 1!)
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>Importante:</strong> A soma de todas as frações molares sempre é igual a 1. 
+                        Se X₁ = 0,3, então X₂ = 0,7 automaticamente!
+                    </div>
+                `
+            },
+            'solubilidade': {
+                titulo: 'Coeficiente de Solubilidade',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            O <strong>coeficiente de solubilidade</strong> indica a <strong>quantidade máxima</strong> 
+                            de soluto que consegue se dissolver em uma quantidade fixa de solvente, a uma determinada 
+                            temperatura. É expresso em <strong>gramas de soluto por 100g de solvente</strong>.
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">Cs = (m soluto / m solvente) × 100</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">🔤 O que cada termo significa?</div>
+                        <div class="ajuda-variaveis">
+                            <span class="ajuda-var">Cs</span>
+                            <span class="ajuda-var-desc">Coeficiente de solubilidade (g/100g de solvente)</span>
+                            <span class="ajuda-var">m soluto</span>
+                            <span class="ajuda-var-desc">Massa da substância dissolvida</span>
+                            <span class="ajuda-var">m solvente</span>
+                            <span class="ajuda-var-desc">Massa do líquido onde dissolvemos (geralmente água)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo prático:</div>
+                        <div class="ajuda-exemplo-texto">
+                            A 20°C, o sal (NaCl) tem Cs = 36 g/100g de água.<br><br>
+                            Isso significa que em 100g de água a 20°C, conseguimos dissolver <strong>no máximo</strong> 
+                            36g de sal. Se colocarmos mais, o excesso fica no fundo (solução saturada com corpo de fundo).<br><br>
+                            <strong>Tipos de solução:</strong><br>
+                            • Insaturada: tem menos soluto que o máximo<br>
+                            • Saturada: tem exatamente o máximo<br>
+                            • Supersaturada: tem mais que o máximo (instável!)
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>Curiosidade:</strong> A maioria das substâncias dissolve mais em água quente. 
+                        Por isso o açúcar dissolve mais rápido no café quente!
+                    </div>
+                `
+            },
+            'diluicao': {
+                titulo: 'Diluição de Soluções',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            <strong>Diluir</strong> é adicionar mais solvente (geralmente água) a uma solução, 
+                            fazendo a concentração <strong>diminuir</strong>. A quantidade de soluto permanece 
+                            a mesma, mas agora está espalhada em um volume maior!
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">C₁ × V₁ = C₂ × V₂</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">🔤 O que cada termo significa?</div>
+                        <div class="ajuda-variaveis">
+                            <span class="ajuda-var">C₁</span>
+                            <span class="ajuda-var-desc">Concentração inicial (antes de diluir) - mais concentrada</span>
+                            <span class="ajuda-var">V₁</span>
+                            <span class="ajuda-var-desc">Volume inicial (antes de diluir) - menor volume</span>
+                            <span class="ajuda-var">C₂</span>
+                            <span class="ajuda-var-desc">Concentração final (após diluir) - mais diluída</span>
+                            <span class="ajuda-var">V₂</span>
+                            <span class="ajuda-var-desc">Volume final (após diluir) - maior volume</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo do dia a dia:</div>
+                        <div class="ajuda-exemplo-texto">
+                            Você tem <strong>100mL de suco concentrado</strong> (C₁ = 50 g/L) e quer diluir 
+                            até <strong>500mL</strong>. Qual será a concentração final?<br><br>
+                            C₁ × V₁ = C₂ × V₂<br>
+                            50 × 0,1 = C₂ × 0,5<br>
+                            5 = C₂ × 0,5<br>
+                            C₂ = 5 / 0,5 = <strong>10 g/L</strong><br><br>
+                            O suco ficou 5 vezes menos concentrado!
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>Por que funciona?</strong> A quantidade de soluto (C×V) não muda, 
+                        só o volume aumenta. É como dividir uma pizza em mais fatias - a pizza é a mesma, 
+                        mas cada fatia fica menor!
+                    </div>
+                `
+            },
+            'massa-molar': {
+                titulo: 'Massa Molar (g/mol)',
+                conteudo: `
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">📚 O que é?</div>
+                        <div class="ajuda-texto">
+                            A <strong>massa molar</strong> é a massa de <strong>1 mol</strong> de uma substância, 
+                            expressa em <strong>g/mol</strong>. Para calcular, somamos as massas atômicas de todos 
+                            os átomos que formam a molécula.
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-formula-destaque">MM = Σ (massa atômica × quantidade)</div>
+                    
+                    <div class="ajuda-secao">
+                        <div class="ajuda-titulo">🔤 Como calcular?</div>
+                        <div class="ajuda-texto">
+                            1. Identifique todos os elementos na fórmula<br>
+                            2. Conte quantos átomos de cada elemento existem<br>
+                            3. Multiplique a massa atômica pela quantidade<br>
+                            4. Some tudo!
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo - Água (H₂O):</div>
+                        <div class="ajuda-exemplo-texto">
+                            <strong>H₂O</strong> tem: 2 átomos de H + 1 átomo de O<br><br>
+                            Hidrogênio (H): 1 g/mol × 2 = 2 g/mol<br>
+                            Oxigênio (O): 16 g/mol × 1 = 16 g/mol<br><br>
+                            <strong>MM(H₂O) = 2 + 16 = 18 g/mol</strong><br><br>
+                            Isso significa que 1 mol de água (6×10²³ moléculas) pesa 18 gramas!
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-exemplo">
+                        <div class="ajuda-exemplo-titulo">🧪 Exemplo - Ácido Sulfúrico (H₂SO₄):</div>
+                        <div class="ajuda-exemplo-texto">
+                            H: 1 × 2 = 2 g/mol<br>
+                            S: 32 × 1 = 32 g/mol<br>
+                            O: 16 × 4 = 64 g/mol<br><br>
+                            <strong>MM(H₂SO₄) = 2 + 32 + 64 = 98 g/mol</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="ajuda-dica">
+                        💡 <strong>Dica:</strong> As massas atômicas estão na tabela periódica! 
+                        As mais comuns: H=1, C=12, N=14, O=16, S=32, Cl=35,5, Na=23, Ca=40.
+                    </div>
+                `
+            }
+        };
+
+        // Funções do Modal de Ajuda
+        function showAjuda(tipo) {
+            const ajuda = ajudaConteudos[tipo];
+            if (!ajuda) return;
+            
+            document.getElementById('modal-ajuda-titulo').textContent = ajuda.titulo;
+            document.getElementById('modal-ajuda-body').innerHTML = ajuda.conteudo;
+            document.getElementById('modal-ajuda').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModalAjuda() {
+            document.getElementById('modal-ajuda').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalAjudaOutside(event) {
+            if (event.target.classList.contains('modal-ajuda-overlay')) {
+                closeModalAjuda();
+            }
+        }
+
         function showResult(elementId, message, isSuccess = true) {
             const el = document.getElementById(elementId);
             el.textContent = message;
             el.className = 'result show ' + (isSuccess ? 'success' : 'error');
         }
 
-        function showSteps(elementId, steps) {
-            const el = document.getElementById(elementId);
-            el.innerHTML = '<strong>📝 Passo a passo:</strong><br>' + 
-                steps.map(s => `<div class="step">${s}</div>`).join('');
-            el.style.display = 'block';
+        // Função para salvar e mostrar o botão de desenvolvimento
+        function saveDesenvolvimento(prefix, data) {
+            desenvolvimentoData[prefix] = data;
+            const btn = document.getElementById(`${prefix}-btn-dev`);
+            if (btn) {
+                btn.classList.add('show');
+            }
         }
 
-        function hideSteps(elementId) {
-            document.getElementById(elementId).style.display = 'none';
+        // Função para esconder o botão de desenvolvimento
+        function hideDesenvolvimento(prefix) {
+            desenvolvimentoData[prefix] = null;
+            const btn = document.getElementById(`${prefix}-btn-dev`);
+            if (btn) {
+                btn.classList.remove('show');
+            }
         }
+
+        // Função para abrir o modal de desenvolvimento
+        function showDesenvolvimento(prefix) {
+            const data = desenvolvimentoData[prefix];
+            if (!data) return;
+
+            const modalBody = document.getElementById('modal-body-content');
+            let html = '';
+
+            data.steps.forEach((step, index) => {
+                const isLast = index === data.steps.length - 1;
+                html += `
+                    <div class="desenvolvimento-step">
+                        <div class="step-title">
+                            <span class="step-number">${index + 1}</span>
+                            ${step.titulo}
+                        </div>
+                        ${step.formula ? `<div class="step-formula${isLast ? ' highlight' : ''}">${step.formula}</div>` : ''}
+                        ${step.descricao ? `<div class="step-description">${step.descricao}</div>` : ''}
+                    </div>
+                `;
+            });
+
+            modalBody.innerHTML = html;
+            document.getElementById('modal-desenvolvimento').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('modal-desenvolvimento').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Fechar modal clicando fora
+        function closeModalOutside(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                closeModal();
+            }
+        }
+
+        // Fechar modais com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeModalAjuda();
+            }
+        });
 
         function clearFields(prefix) {
             const inputs = document.querySelectorAll(`[id^="${prefix}-"]`);
@@ -644,10 +1503,7 @@
             if (result) {
                 result.classList.remove('show');
             }
-            const steps = document.getElementById(`${prefix}-steps`);
-            if (steps) {
-                steps.style.display = 'none';
-            }
+            hideDesenvolvimento(prefix);
         }
 
         function getValue(id) {
@@ -708,60 +1564,69 @@
             
             if (nullCount === 0) {
                 showResult('cc-result', '❌ Deixe UM campo em branco para calcular!', false);
-                hideSteps('cc-steps');
+                hideDesenvolvimento('cc');
                 return;
             }
             if (nullCount > 1) {
                 showResult('cc-result', '❌ Preencha pelo menos 2 valores!', false);
-                hideSteps('cc-steps');
+                hideDesenvolvimento('cc');
                 return;
             }
 
-            let steps = [];
+            let devSteps = [];
             
             if (C === null) {
-                // C = m / V
                 if (V === 0) {
                     showResult('cc-result', '❌ Volume não pode ser zero!', false);
+                    hideDesenvolvimento('cc');
                     return;
                 }
-                const resultBase = m / V; // resultado em g/L
+                const resultBase = m / V;
                 const resultDisplay = setCalculatedWithUnit('cc-conc', resultBase, 'cc-conc-unit');
                 const unitLabel = getUnitLabel('cc-conc-unit');
-                steps = [
-                    `Fórmula: C = m / V`,
-                    `C = ${formatNumber(m)} g / ${formatNumber(V)} L`,
-                    `C = ${formatNumber(resultBase)} g/L = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'C = m / V', descricao: 'Concentração é igual à massa dividida pelo volume' },
+                    { titulo: 'Substituir os valores', formula: `C = ${formatNumber(m)} g / ${formatNumber(V)} L`, descricao: 'Substituindo os valores fornecidos na fórmula' },
+                    { titulo: 'Calcular o resultado', formula: `C = ${formatNumber(resultBase)} g/L`, descricao: 'Realizando a divisão' },
+                    { titulo: 'Resultado Final', formula: `C = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Convertendo para a unidade selecionada' }
                 ];
+                
                 showResult('cc-result', `✓ Concentração = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else if (m === null) {
-                // m = C × V
-                const resultBase = C * V; // resultado em g
+                const resultBase = C * V;
                 const resultDisplay = setCalculatedWithUnit('cc-massa', resultBase, 'cc-massa-unit');
                 const unitLabel = getUnitLabel('cc-massa-unit');
-                steps = [
-                    `Fórmula: m = C × V`,
-                    `m = ${formatNumber(C)} g/L × ${formatNumber(V)} L`,
-                    `m = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'C = m / V → m = C × V', descricao: 'Isolando a massa na fórmula da concentração' },
+                    { titulo: 'Substituir os valores', formula: `m = ${formatNumber(C)} g/L × ${formatNumber(V)} L`, descricao: 'Substituindo os valores fornecidos na fórmula' },
+                    { titulo: 'Calcular o resultado', formula: `m = ${formatNumber(resultBase)} g`, descricao: 'Realizando a multiplicação' },
+                    { titulo: 'Resultado Final', formula: `m = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Convertendo para a unidade selecionada' }
                 ];
+                
                 showResult('cc-result', `✓ Massa = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // V = m / C
                 if (C === 0) {
                     showResult('cc-result', '❌ Concentração não pode ser zero!', false);
+                    hideDesenvolvimento('cc');
                     return;
                 }
-                const resultBase = m / C; // resultado em L
+                const resultBase = m / C;
                 const resultDisplay = setCalculatedWithUnit('cc-volume', resultBase, 'cc-volume-unit');
                 const unitLabel = getUnitLabel('cc-volume-unit');
-                steps = [
-                    `Fórmula: V = m / C`,
-                    `V = ${formatNumber(m)} g / ${formatNumber(C)} g/L`,
-                    `V = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'C = m / V → V = m / C', descricao: 'Isolando o volume na fórmula da concentração' },
+                    { titulo: 'Substituir os valores', formula: `V = ${formatNumber(m)} g / ${formatNumber(C)} g/L`, descricao: 'Substituindo os valores fornecidos na fórmula' },
+                    { titulo: 'Calcular o resultado', formula: `V = ${formatNumber(resultBase)} L`, descricao: 'Realizando a divisão' },
+                    { titulo: 'Resultado Final', formula: `V = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Convertendo para a unidade selecionada' }
                 ];
+                
                 showResult('cc-result', `✓ Volume = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
-            showSteps('cc-steps', steps);
+            
+            saveDesenvolvimento('cc', { steps: devSteps });
         }
 
         // Molar: M = m / (MM × V)
@@ -773,7 +1638,7 @@
 
             if (!MM || MM === 0) {
                 showResult('m-result', '❌ Massa Molar é obrigatória!', false);
-                hideSteps('m-steps');
+                hideDesenvolvimento('m');
                 return;
             }
 
@@ -781,59 +1646,71 @@
             
             if (nullCount === 0) {
                 showResult('m-result', '❌ Deixe UM campo em branco (exceto MM)!', false);
-                hideSteps('m-steps');
+                hideDesenvolvimento('m');
                 return;
             }
             if (nullCount > 1) {
                 showResult('m-result', '❌ Preencha pelo menos 2 valores (além de MM)!', false);
-                hideSteps('m-steps');
+                hideDesenvolvimento('m');
                 return;
             }
 
-            let steps = [];
+            let devSteps = [];
 
             if (M === null) {
-                // M = m / (MM × V)
                 if (V === 0) {
                     showResult('m-result', '❌ Volume não pode ser zero!', false);
+                    hideDesenvolvimento('m');
                     return;
                 }
                 const result = m / (MM * V);
-                steps = [
-                    `Fórmula: M = m / (MM × V)`,
-                    `M = ${formatNumber(m)} g / (${formatNumber(MM)} g/mol × ${formatNumber(V)} L)`,
-                    `M = ${formatNumber(result)} mol/L`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'M = m / (MM × V)', descricao: 'Molaridade é igual à massa dividida pelo produto da massa molar e volume' },
+                    { titulo: 'Identificar os valores', formula: `m = ${formatNumber(m)} g | MM = ${formatNumber(MM)} g/mol | V = ${formatNumber(V)} L`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `M = ${formatNumber(m)} / (${formatNumber(MM)} × ${formatNumber(V)})`, descricao: 'Substituindo os valores na fórmula' },
+                    { titulo: 'Calcular o denominador', formula: `M = ${formatNumber(m)} / ${formatNumber(MM * V)}`, descricao: `Multiplicando MM × V = ${formatNumber(MM * V)}` },
+                    { titulo: 'Resultado Final', formula: `M = ${formatNumber(result)} mol/L`, descricao: 'Realizando a divisão final' }
                 ];
+                
                 setCalculated('m-molar', result);
                 showResult('m-result', `✓ Molaridade = ${formatNumber(result)} mol/L`);
             } else if (m === null) {
-                // m = M × MM × V
-                const resultBase = M * MM * V; // resultado em g
+                const resultBase = M * MM * V;
                 const resultDisplay = setCalculatedWithUnit('m-massa', resultBase, 'm-massa-unit');
                 const unitLabel = getUnitLabel('m-massa-unit');
-                steps = [
-                    `Fórmula: m = M × MM × V`,
-                    `m = ${formatNumber(M)} mol/L × ${formatNumber(MM)} g/mol × ${formatNumber(V)} L`,
-                    `m = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'M = m / (MM × V) → m = M × MM × V', descricao: 'Isolando a massa na fórmula da molaridade' },
+                    { titulo: 'Identificar os valores', formula: `M = ${formatNumber(M)} mol/L | MM = ${formatNumber(MM)} g/mol | V = ${formatNumber(V)} L`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `m = ${formatNumber(M)} × ${formatNumber(MM)} × ${formatNumber(V)}`, descricao: 'Substituindo os valores na fórmula' },
+                    { titulo: 'Calcular o resultado', formula: `m = ${formatNumber(resultBase)} g`, descricao: 'Realizando as multiplicações' },
+                    { titulo: 'Resultado Final', formula: `m = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Convertendo para a unidade selecionada' }
                 ];
+                
                 showResult('m-result', `✓ Massa = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // V = m / (M × MM)
                 if (M === 0) {
                     showResult('m-result', '❌ Molaridade não pode ser zero!', false);
+                    hideDesenvolvimento('m');
                     return;
                 }
-                const resultBase = m / (M * MM); // resultado em L
+                const resultBase = m / (M * MM);
                 const resultDisplay = setCalculatedWithUnit('m-volume', resultBase, 'm-volume-unit');
                 const unitLabel = getUnitLabel('m-volume-unit');
-                steps = [
-                    `Fórmula: V = m / (M × MM)`,
-                    `V = ${formatNumber(m)} g / (${formatNumber(M)} mol/L × ${formatNumber(MM)} g/mol)`,
-                    `V = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'M = m / (MM × V) → V = m / (M × MM)', descricao: 'Isolando o volume na fórmula da molaridade' },
+                    { titulo: 'Identificar os valores', formula: `m = ${formatNumber(m)} g | M = ${formatNumber(M)} mol/L | MM = ${formatNumber(MM)} g/mol`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `V = ${formatNumber(m)} / (${formatNumber(M)} × ${formatNumber(MM)})`, descricao: 'Substituindo os valores na fórmula' },
+                    { titulo: 'Calcular o denominador', formula: `V = ${formatNumber(m)} / ${formatNumber(M * MM)}`, descricao: `Multiplicando M × MM = ${formatNumber(M * MM)}` },
+                    { titulo: 'Resultado Final', formula: `V = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Realizando a divisão e convertendo' }
                 ];
+                
                 showResult('m-result', `✓ Volume = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
-            showSteps('m-steps', steps);
+            
+            saveDesenvolvimento('m', { steps: devSteps });
         }
 
         function updatePorcentagemLabels() {
@@ -875,64 +1752,75 @@
             
             if (nullCount === 0) {
                 showResult('p-result', '❌ Deixe UM campo em branco para calcular!', false);
-                hideSteps('p-steps');
+                hideDesenvolvimento('p');
                 return;
             }
             if (nullCount > 1) {
                 showResult('p-result', '❌ Preencha pelo menos 2 valores!', false);
-                hideSteps('p-steps');
+                hideDesenvolvimento('p');
                 return;
             }
 
             let tipoTexto = tipo === 'mm' ? 'm/m' : (tipo === 'vv' ? 'v/v' : 'm/v');
-            // Unidades base para os cálculos
             let unidadeBase1 = tipo === 'vv' ? 'mL' : 'g';
             let unidadeBase2 = tipo === 'mm' ? 'g' : 'mL';
             
-            let steps = [];
+            let devSteps = [];
 
             if (perc === null) {
-                // % = (parte / total) × 100
                 if (val2 === 0) {
                     showResult('p-result', '❌ O total não pode ser zero!', false);
+                    hideDesenvolvimento('p');
                     return;
                 }
                 const result = (val1 / val2) * 100;
-                steps = [
-                    `Fórmula: % = (parte / total) × 100`,
-                    `% = (${formatNumber(val1)} ${unidadeBase1} / ${formatNumber(val2)} ${unidadeBase2}) × 100`,
-                    `% = ${formatNumber(result)} %`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: '% = (parte / total) × 100', descricao: `Fórmula da concentração percentual ${tipoTexto}` },
+                    { titulo: 'Identificar os valores', formula: `Parte = ${formatNumber(val1)} ${unidadeBase1} | Total = ${formatNumber(val2)} ${unidadeBase2}`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `% = (${formatNumber(val1)} / ${formatNumber(val2)}) × 100`, descricao: 'Substituindo os valores' },
+                    { titulo: 'Calcular a divisão', formula: `% = ${formatNumber(val1 / val2)} × 100`, descricao: 'Realizando a divisão' },
+                    { titulo: 'Resultado Final', formula: `% = ${formatNumber(result)}%`, descricao: 'Multiplicando por 100' }
                 ];
+                
                 setCalculated('p-perc', result);
                 showResult('p-result', `✓ ${tipoTexto} = ${formatNumber(result)} %`);
             } else if (val1 === null) {
-                // parte = (% × total) / 100
-                const resultBase = (perc * val2) / 100; // resultado na unidade base
+                const resultBase = (perc * val2) / 100;
                 const resultDisplay = setCalculatedWithUnit('p-val1', resultBase, 'p-unit1');
                 const unitLabel = getUnitLabel('p-unit1');
-                steps = [
-                    `Fórmula: parte = (% × total) / 100`,
-                    `parte = (${formatNumber(perc)} × ${formatNumber(val2)} ${unidadeBase2}) / 100`,
-                    `parte = ${formatNumber(resultBase)} ${unidadeBase1} = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: '% = (parte / total) × 100 → parte = (% × total) / 100', descricao: 'Isolando a parte na fórmula' },
+                    { titulo: 'Identificar os valores', formula: `% = ${formatNumber(perc)} | Total = ${formatNumber(val2)} ${unidadeBase2}`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `parte = (${formatNumber(perc)} × ${formatNumber(val2)}) / 100`, descricao: 'Substituindo os valores' },
+                    { titulo: 'Calcular o numerador', formula: `parte = ${formatNumber(perc * val2)} / 100`, descricao: 'Realizando a multiplicação' },
+                    { titulo: 'Resultado Final', formula: `parte = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Dividindo por 100 e convertendo' }
                 ];
+                
                 showResult('p-result', `✓ Parte = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // total = (parte × 100) / %
                 if (perc === 0) {
                     showResult('p-result', '❌ Porcentagem não pode ser zero!', false);
+                    hideDesenvolvimento('p');
                     return;
                 }
-                const resultBase = (val1 * 100) / perc; // resultado na unidade base
+                const resultBase = (val1 * 100) / perc;
                 const resultDisplay = setCalculatedWithUnit('p-val2', resultBase, 'p-unit2');
                 const unitLabel = getUnitLabel('p-unit2');
-                steps = [
-                    `Fórmula: total = (parte × 100) / %`,
-                    `total = (${formatNumber(val1)} ${unidadeBase1} × 100) / ${formatNumber(perc)}`,
-                    `total = ${formatNumber(resultBase)} ${unidadeBase2} = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: '% = (parte / total) × 100 → total = (parte × 100) / %', descricao: 'Isolando o total na fórmula' },
+                    { titulo: 'Identificar os valores', formula: `Parte = ${formatNumber(val1)} ${unidadeBase1} | % = ${formatNumber(perc)}`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `total = (${formatNumber(val1)} × 100) / ${formatNumber(perc)}`, descricao: 'Substituindo os valores' },
+                    { titulo: 'Calcular o numerador', formula: `total = ${formatNumber(val1 * 100)} / ${formatNumber(perc)}`, descricao: 'Multiplicando por 100' },
+                    { titulo: 'Resultado Final', formula: `total = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Dividindo e convertendo' }
                 ];
+                
                 showResult('p-result', `✓ Total = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
-            showSteps('p-steps', steps);
+            
+            saveDesenvolvimento('p', { steps: devSteps });
         }
 
         // Densidade: d = m / V
@@ -945,59 +1833,70 @@
             
             if (nullCount === 0) {
                 showResult('d-result', '❌ Deixe UM campo em branco para calcular!', false);
-                hideSteps('d-steps');
+                hideDesenvolvimento('d');
                 return;
             }
             if (nullCount > 1) {
                 showResult('d-result', '❌ Preencha pelo menos 2 valores!', false);
-                hideSteps('d-steps');
+                hideDesenvolvimento('d');
                 return;
             }
 
-            let steps = [];
+            let devSteps = [];
 
             if (d === null) {
-                // d = m / V (resultado em g/mL)
                 if (V === 0) {
                     showResult('d-result', '❌ Volume não pode ser zero!', false);
+                    hideDesenvolvimento('d');
                     return;
                 }
                 const result = m / V;
-                steps = [
-                    `Fórmula: d = m / V`,
-                    `d = ${formatNumber(m)} g / ${formatNumber(V)} mL`,
-                    `d = ${formatNumber(result)} g/mL`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'd = m / V', descricao: 'Densidade é igual à massa dividida pelo volume' },
+                    { titulo: 'Identificar os valores', formula: `m = ${formatNumber(m)} g | V = ${formatNumber(V)} mL`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `d = ${formatNumber(m)} / ${formatNumber(V)}`, descricao: 'Substituindo os valores' },
+                    { titulo: 'Resultado Final', formula: `d = ${formatNumber(result)} g/mL`, descricao: 'Realizando a divisão' }
                 ];
+                
                 setCalculated('d-dens', result);
                 showResult('d-result', `✓ Densidade = ${formatNumber(result)} g/mL`);
             } else if (m === null) {
-                // m = d × V (resultado em g)
                 const resultBase = d * V;
                 const resultDisplay = setCalculatedWithUnit('d-massa', resultBase, 'd-massa-unit');
                 const unitLabel = getUnitLabel('d-massa-unit');
-                steps = [
-                    `Fórmula: m = d × V`,
-                    `m = ${formatNumber(d)} g/mL × ${formatNumber(V)} mL`,
-                    `m = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'd = m / V → m = d × V', descricao: 'Isolando a massa na fórmula da densidade' },
+                    { titulo: 'Identificar os valores', formula: `d = ${formatNumber(d)} g/mL | V = ${formatNumber(V)} mL`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `m = ${formatNumber(d)} × ${formatNumber(V)}`, descricao: 'Substituindo os valores' },
+                    { titulo: 'Calcular o resultado', formula: `m = ${formatNumber(resultBase)} g`, descricao: 'Realizando a multiplicação' },
+                    { titulo: 'Resultado Final', formula: `m = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Convertendo para a unidade selecionada' }
                 ];
+                
                 showResult('d-result', `✓ Massa = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // V = m / d (resultado em mL)
                 if (d === 0) {
                     showResult('d-result', '❌ Densidade não pode ser zero!', false);
+                    hideDesenvolvimento('d');
                     return;
                 }
                 const resultBase = m / d;
                 const resultDisplay = setCalculatedWithUnit('d-volume', resultBase, 'd-volume-unit');
                 const unitLabel = getUnitLabel('d-volume-unit');
-                steps = [
-                    `Fórmula: V = m / d`,
-                    `V = ${formatNumber(m)} g / ${formatNumber(d)} g/mL`,
-                    `V = ${formatNumber(resultBase)} mL = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'd = m / V → V = m / d', descricao: 'Isolando o volume na fórmula da densidade' },
+                    { titulo: 'Identificar os valores', formula: `m = ${formatNumber(m)} g | d = ${formatNumber(d)} g/mL`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Substituir na fórmula', formula: `V = ${formatNumber(m)} / ${formatNumber(d)}`, descricao: 'Substituindo os valores' },
+                    { titulo: 'Calcular o resultado', formula: `V = ${formatNumber(resultBase)} mL`, descricao: 'Realizando a divisão' },
+                    { titulo: 'Resultado Final', formula: `V = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Convertendo para a unidade selecionada' }
                 ];
+                
                 showResult('d-result', `✓ Volume = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
-            showSteps('d-steps', steps);
+            
+            saveDesenvolvimento('d', { steps: devSteps });
         }
 
         // Fração Molar: X₁ = n₁ / (n₁ + n₂)
@@ -1010,63 +1909,76 @@
             
             if (nullCount === 0) {
                 showResult('f-result', '❌ Deixe UM campo em branco para calcular!', false);
-                hideSteps('f-steps');
+                hideDesenvolvimento('f');
                 return;
             }
             if (nullCount > 1) {
                 showResult('f-result', '❌ Preencha pelo menos 2 valores!', false);
-                hideSteps('f-steps');
+                hideDesenvolvimento('f');
                 return;
             }
 
-            let steps = [];
+            let devSteps = [];
 
             if (X === null) {
-                // X = n1 / (n1 + n2)
                 if (n1 + n2 === 0) {
                     showResult('f-result', '❌ Soma dos mols não pode ser zero!', false);
+                    hideDesenvolvimento('f');
                     return;
                 }
                 const result = n1 / (n1 + n2);
                 const x2 = 1 - result;
-                steps = [
-                    `Fórmula: X₁ = n₁ / (n₁ + n₂)`,
-                    `X₁ = ${formatNumber(n1)} / (${formatNumber(n1)} + ${formatNumber(n2)})`,
-                    `X₁ = ${formatNumber(result)}`,
-                    `X₂ = 1 - X₁ = ${formatNumber(x2)}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'X₁ = n₁ / (n₁ + n₂)', descricao: 'Fração molar do soluto' },
+                    { titulo: 'Identificar os valores', formula: `n₁ = ${formatNumber(n1)} mol | n₂ = ${formatNumber(n2)} mol`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o denominador', formula: `n₁ + n₂ = ${formatNumber(n1)} + ${formatNumber(n2)} = ${formatNumber(n1 + n2)} mol`, descricao: 'Soma dos mols' },
+                    { titulo: 'Substituir e calcular', formula: `X₁ = ${formatNumber(n1)} / ${formatNumber(n1 + n2)} = ${formatNumber(result)}`, descricao: 'Realizando a divisão' },
+                    { titulo: 'Calcular X₂', formula: `X₂ = 1 - X₁ = 1 - ${formatNumber(result)} = ${formatNumber(x2)}`, descricao: 'Fração molar do solvente' },
+                    { titulo: 'Resultado Final', formula: `X₁ = ${formatNumber(result)} | X₂ = ${formatNumber(x2)}`, descricao: 'X₁ + X₂ = 1' }
                 ];
+                
                 setCalculated('f-x', result);
                 showResult('f-result', `✓ X₁ = ${formatNumber(result)} | X₂ = ${formatNumber(x2)}`);
             } else if (n1 === null) {
-                // n1 = (X × n2) / (1 - X)
                 if (X >= 1) {
                     showResult('f-result', '❌ Fração molar deve ser menor que 1!', false);
+                    hideDesenvolvimento('f');
                     return;
                 }
                 const result = (X * n2) / (1 - X);
-                steps = [
-                    `Fórmula: n₁ = (X₁ × n₂) / (1 - X₁)`,
-                    `n₁ = (${formatNumber(X)} × ${formatNumber(n2)}) / (1 - ${formatNumber(X)})`,
-                    `n₁ = ${formatNumber(result)} mol`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'X₁ = n₁ / (n₁ + n₂) → n₁ = (X₁ × n₂) / (1 - X₁)', descricao: 'Isolando n₁ na fórmula' },
+                    { titulo: 'Identificar os valores', formula: `X₁ = ${formatNumber(X)} | n₂ = ${formatNumber(n2)} mol`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o numerador', formula: `X₁ × n₂ = ${formatNumber(X)} × ${formatNumber(n2)} = ${formatNumber(X * n2)}`, descricao: 'Multiplicação' },
+                    { titulo: 'Calcular o denominador', formula: `1 - X₁ = 1 - ${formatNumber(X)} = ${formatNumber(1 - X)}`, descricao: 'Subtração' },
+                    { titulo: 'Resultado Final', formula: `n₁ = ${formatNumber(X * n2)} / ${formatNumber(1 - X)} = ${formatNumber(result)} mol`, descricao: 'Divisão final' }
                 ];
+                
                 setCalculated('f-n1', result);
                 showResult('f-result', `✓ n₁ = ${formatNumber(result)} mol`);
             } else {
-                // n2 = n1 × (1 - X) / X
                 if (X === 0) {
                     showResult('f-result', '❌ Fração molar não pode ser zero!', false);
+                    hideDesenvolvimento('f');
                     return;
                 }
                 const result = n1 * (1 - X) / X;
-                steps = [
-                    `Fórmula: n₂ = n₁ × (1 - X₁) / X₁`,
-                    `n₂ = ${formatNumber(n1)} × (1 - ${formatNumber(X)}) / ${formatNumber(X)}`,
-                    `n₂ = ${formatNumber(result)} mol`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'X₁ = n₁ / (n₁ + n₂) → n₂ = n₁ × (1 - X₁) / X₁', descricao: 'Isolando n₂ na fórmula' },
+                    { titulo: 'Identificar os valores', formula: `n₁ = ${formatNumber(n1)} mol | X₁ = ${formatNumber(X)}`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular (1 - X₁)', formula: `1 - X₁ = 1 - ${formatNumber(X)} = ${formatNumber(1 - X)}`, descricao: 'Subtração' },
+                    { titulo: 'Calcular o numerador', formula: `n₁ × (1 - X₁) = ${formatNumber(n1)} × ${formatNumber(1 - X)} = ${formatNumber(n1 * (1 - X))}`, descricao: 'Multiplicação' },
+                    { titulo: 'Resultado Final', formula: `n₂ = ${formatNumber(n1 * (1 - X))} / ${formatNumber(X)} = ${formatNumber(result)} mol`, descricao: 'Divisão final' }
                 ];
+                
                 setCalculated('f-n2', result);
                 showResult('f-result', `✓ n₂ = ${formatNumber(result)} mol`);
             }
-            showSteps('f-steps', steps);
+            
+            saveDesenvolvimento('f', { steps: devSteps });
         }
 
         // Solubilidade: Cs = (soluto / solvente) × 100
@@ -1079,59 +1991,68 @@
             
             if (nullCount === 0) {
                 showResult('s-result', '❌ Deixe UM campo em branco para calcular!', false);
-                hideSteps('s-steps');
+                hideDesenvolvimento('s');
                 return;
             }
             if (nullCount > 1) {
                 showResult('s-result', '❌ Preencha pelo menos 2 valores!', false);
-                hideSteps('s-steps');
+                hideDesenvolvimento('s');
                 return;
             }
 
-            let steps = [];
+            let devSteps = [];
 
             if (Cs === null) {
-                // Cs = (soluto / solvente) × 100
                 if (solvente === 0) {
                     showResult('s-result', '❌ Massa do solvente não pode ser zero!', false);
+                    hideDesenvolvimento('s');
                     return;
                 }
                 const result = (soluto / solvente) * 100;
-                steps = [
-                    `Fórmula: Cs = (soluto / solvente) × 100`,
-                    `Cs = (${formatNumber(soluto)} g / ${formatNumber(solvente)} g) × 100`,
-                    `Cs = ${formatNumber(result)} g/100g`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'Cs = (soluto / solvente) × 100', descricao: 'Coeficiente de solubilidade em g/100g de solvente' },
+                    { titulo: 'Identificar os valores', formula: `Soluto = ${formatNumber(soluto)} g | Solvente = ${formatNumber(solvente)} g`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular a divisão', formula: `Soluto / Solvente = ${formatNumber(soluto)} / ${formatNumber(solvente)} = ${formatNumber(soluto / solvente)}`, descricao: 'Dividindo as massas' },
+                    { titulo: 'Resultado Final', formula: `Cs = ${formatNumber(soluto / solvente)} × 100 = ${formatNumber(result)} g/100g`, descricao: 'Multiplicando por 100' }
                 ];
+                
                 setCalculated('s-cs', result);
                 showResult('s-result', `✓ Cs = ${formatNumber(result)} g/100g de solvente`);
             } else if (soluto === null) {
-                // soluto = (Cs × solvente) / 100 (resultado em g)
                 const resultBase = (Cs * solvente) / 100;
                 const resultDisplay = setCalculatedWithUnit('s-soluto', resultBase, 's-soluto-unit');
                 const unitLabel = getUnitLabel('s-soluto-unit');
-                steps = [
-                    `Fórmula: soluto = (Cs × solvente) / 100`,
-                    `soluto = (${formatNumber(Cs)} × ${formatNumber(solvente)} g) / 100`,
-                    `soluto = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'Cs = (soluto / solvente) × 100 → soluto = (Cs × solvente) / 100', descricao: 'Isolando a massa de soluto' },
+                    { titulo: 'Identificar os valores', formula: `Cs = ${formatNumber(Cs)} g/100g | Solvente = ${formatNumber(solvente)} g`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o numerador', formula: `Cs × Solvente = ${formatNumber(Cs)} × ${formatNumber(solvente)} = ${formatNumber(Cs * solvente)}`, descricao: 'Multiplicação' },
+                    { titulo: 'Resultado Final', formula: `Soluto = ${formatNumber(Cs * solvente)} / 100 = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Dividindo por 100 e convertendo' }
                 ];
+                
                 showResult('s-result', `✓ Massa de soluto = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // solvente = (soluto × 100) / Cs (resultado em g)
                 if (Cs === 0) {
                     showResult('s-result', '❌ Coeficiente não pode ser zero!', false);
+                    hideDesenvolvimento('s');
                     return;
                 }
                 const resultBase = (soluto * 100) / Cs;
                 const resultDisplay = setCalculatedWithUnit('s-solvente', resultBase, 's-solvente-unit');
                 const unitLabel = getUnitLabel('s-solvente-unit');
-                steps = [
-                    `Fórmula: solvente = (soluto × 100) / Cs`,
-                    `solvente = (${formatNumber(soluto)} g × 100) / ${formatNumber(Cs)}`,
-                    `solvente = ${formatNumber(resultBase)} g = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'Cs = (soluto / solvente) × 100 → solvente = (soluto × 100) / Cs', descricao: 'Isolando a massa de solvente' },
+                    { titulo: 'Identificar os valores', formula: `Soluto = ${formatNumber(soluto)} g | Cs = ${formatNumber(Cs)} g/100g`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o numerador', formula: `Soluto × 100 = ${formatNumber(soluto)} × 100 = ${formatNumber(soluto * 100)}`, descricao: 'Multiplicando por 100' },
+                    { titulo: 'Resultado Final', formula: `Solvente = ${formatNumber(soluto * 100)} / ${formatNumber(Cs)} = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Dividindo e convertendo' }
                 ];
+                
                 showResult('s-result', `✓ Massa de solvente = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
-            showSteps('s-steps', steps);
+            
+            saveDesenvolvimento('s', { steps: devSteps });
         }
 
         // Diluição: C₁V₁ = C₂V₂
@@ -1145,79 +2066,96 @@
             
             if (nullCount === 0) {
                 showResult('dil-result', '❌ Deixe UM campo em branco para calcular!', false);
-                hideSteps('dil-steps');
+                hideDesenvolvimento('dil');
                 return;
             }
             if (nullCount > 1) {
                 showResult('dil-result', '❌ Preencha pelo menos 3 valores!', false);
-                hideSteps('dil-steps');
+                hideDesenvolvimento('dil');
                 return;
             }
 
-            let steps = [];
+            let devSteps = [];
 
             if (C1 === null) {
-                // C1 = (C2 × V2) / V1 (concentração, sem conversão de unidade específica)
                 if (V1 === 0) {
                     showResult('dil-result', '❌ V₁ não pode ser zero!', false);
+                    hideDesenvolvimento('dil');
                     return;
                 }
                 const resultBase = (C2 * V2) / V1;
                 const resultDisplay = setCalculatedWithUnit('dil-c1', resultBase, 'dil-c1-unit');
                 const unitLabel = getUnitLabel('dil-c1-unit');
-                steps = [
-                    `Fórmula: C₁ = (C₂ × V₂) / V₁`,
-                    `C₁ = (${formatNumber(C2)} × ${formatNumber(V2)} L) / ${formatNumber(V1)} L`,
-                    `C₁ = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'C₁ × V₁ = C₂ × V₂', descricao: 'Lei da diluição: o produto concentração × volume é constante' },
+                    { titulo: 'Isolar C₁', formula: 'C₁ = (C₂ × V₂) / V₁', descricao: 'Isolando a concentração inicial' },
+                    { titulo: 'Identificar os valores', formula: `C₂ = ${formatNumber(C2)} | V₂ = ${formatNumber(V2)} L | V₁ = ${formatNumber(V1)} L`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o numerador', formula: `C₂ × V₂ = ${formatNumber(C2)} × ${formatNumber(V2)} = ${formatNumber(C2 * V2)}`, descricao: 'Multiplicação' },
+                    { titulo: 'Resultado Final', formula: `C₁ = ${formatNumber(C2 * V2)} / ${formatNumber(V1)} = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Divisão final' }
                 ];
+                
                 showResult('dil-result', `✓ C₁ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else if (V1 === null) {
-                // V1 = (C2 × V2) / C1 (resultado em L)
                 if (C1 === 0) {
                     showResult('dil-result', '❌ C₁ não pode ser zero!', false);
+                    hideDesenvolvimento('dil');
                     return;
                 }
                 const resultBase = (C2 * V2) / C1;
                 const resultDisplay = setCalculatedWithUnit('dil-v1', resultBase, 'dil-v1-unit');
                 const unitLabel = getUnitLabel('dil-v1-unit');
-                steps = [
-                    `Fórmula: V₁ = (C₂ × V₂) / C₁`,
-                    `V₁ = (${formatNumber(C2)} × ${formatNumber(V2)} L) / ${formatNumber(C1)}`,
-                    `V₁ = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'C₁ × V₁ = C₂ × V₂', descricao: 'Lei da diluição: o produto concentração × volume é constante' },
+                    { titulo: 'Isolar V₁', formula: 'V₁ = (C₂ × V₂) / C₁', descricao: 'Isolando o volume inicial' },
+                    { titulo: 'Identificar os valores', formula: `C₂ = ${formatNumber(C2)} | V₂ = ${formatNumber(V2)} L | C₁ = ${formatNumber(C1)}`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o numerador', formula: `C₂ × V₂ = ${formatNumber(C2)} × ${formatNumber(V2)} = ${formatNumber(C2 * V2)}`, descricao: 'Multiplicação' },
+                    { titulo: 'Resultado Final', formula: `V₁ = ${formatNumber(C2 * V2)} / ${formatNumber(C1)} = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Divisão final e conversão' }
                 ];
+                
                 showResult('dil-result', `✓ V₁ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else if (C2 === null) {
-                // C2 = (C1 × V1) / V2 (concentração)
                 if (V2 === 0) {
                     showResult('dil-result', '❌ V₂ não pode ser zero!', false);
+                    hideDesenvolvimento('dil');
                     return;
                 }
                 const resultBase = (C1 * V1) / V2;
                 const resultDisplay = setCalculatedWithUnit('dil-c2', resultBase, 'dil-c2-unit');
                 const unitLabel = getUnitLabel('dil-c2-unit');
-                steps = [
-                    `Fórmula: C₂ = (C₁ × V₁) / V₂`,
-                    `C₂ = (${formatNumber(C1)} × ${formatNumber(V1)} L) / ${formatNumber(V2)} L`,
-                    `C₂ = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'C₁ × V₁ = C₂ × V₂', descricao: 'Lei da diluição: o produto concentração × volume é constante' },
+                    { titulo: 'Isolar C₂', formula: 'C₂ = (C₁ × V₁) / V₂', descricao: 'Isolando a concentração final' },
+                    { titulo: 'Identificar os valores', formula: `C₁ = ${formatNumber(C1)} | V₁ = ${formatNumber(V1)} L | V₂ = ${formatNumber(V2)} L`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o numerador', formula: `C₁ × V₁ = ${formatNumber(C1)} × ${formatNumber(V1)} = ${formatNumber(C1 * V1)}`, descricao: 'Multiplicação' },
+                    { titulo: 'Resultado Final', formula: `C₂ = ${formatNumber(C1 * V1)} / ${formatNumber(V2)} = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Divisão final' }
                 ];
+                
                 showResult('dil-result', `✓ C₂ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             } else {
-                // V2 = (C1 × V1) / C2 (resultado em L)
                 if (C2 === 0) {
                     showResult('dil-result', '❌ C₂ não pode ser zero!', false);
+                    hideDesenvolvimento('dil');
                     return;
                 }
                 const resultBase = (C1 * V1) / C2;
                 const resultDisplay = setCalculatedWithUnit('dil-v2', resultBase, 'dil-v2-unit');
                 const unitLabel = getUnitLabel('dil-v2-unit');
-                steps = [
-                    `Fórmula: V₂ = (C₁ × V₁) / C₂`,
-                    `V₂ = (${formatNumber(C1)} × ${formatNumber(V1)} L) / ${formatNumber(C2)}`,
-                    `V₂ = ${formatNumber(resultBase)} L = ${formatNumber(resultDisplay)} ${unitLabel}`
+                
+                devSteps = [
+                    { titulo: 'Identificar a fórmula', formula: 'C₁ × V₁ = C₂ × V₂', descricao: 'Lei da diluição: o produto concentração × volume é constante' },
+                    { titulo: 'Isolar V₂', formula: 'V₂ = (C₁ × V₁) / C₂', descricao: 'Isolando o volume final' },
+                    { titulo: 'Identificar os valores', formula: `C₁ = ${formatNumber(C1)} | V₁ = ${formatNumber(V1)} L | C₂ = ${formatNumber(C2)}`, descricao: 'Valores fornecidos' },
+                    { titulo: 'Calcular o numerador', formula: `C₁ × V₁ = ${formatNumber(C1)} × ${formatNumber(V1)} = ${formatNumber(C1 * V1)}`, descricao: 'Multiplicação' },
+                    { titulo: 'Resultado Final', formula: `V₂ = ${formatNumber(C1 * V1)} / ${formatNumber(C2)} = ${formatNumber(resultDisplay)} ${unitLabel}`, descricao: 'Divisão final e conversão' }
                 ];
+                
                 showResult('dil-result', `✓ V₂ = ${formatNumber(resultDisplay)} ${unitLabel}`);
             }
-            showSteps('dil-steps', steps);
+            
+            saveDesenvolvimento('dil', { steps: devSteps });
         }
 
         // Tabela de Massas Atômicas
@@ -1384,7 +2322,7 @@
             
             if (!formula) {
                 showResult('mm-result', '❌ Digite uma fórmula química!', false);
-                hideSteps('mm-steps');
+                hideDesenvolvimento('mm');
                 return;
             }
             
@@ -1394,21 +2332,38 @@
                 
                 if (elementosKeys.length === 0) {
                     showResult('mm-result', '❌ Fórmula inválida!', false);
-                    hideSteps('mm-steps');
+                    hideDesenvolvimento('mm');
                     return;
                 }
                 
                 let massaTotal = 0;
-                let steps = [];
-                let detalhes = [];
+                let devSteps = [];
                 
-                steps.push(`Fórmula: ${formula}`);
-                steps.push(`Elementos encontrados:`);
+                // Passo 1: Identificar a fórmula
+                devSteps.push({
+                    titulo: 'Identificar a fórmula',
+                    formula: `Fórmula: ${formula}`,
+                    descricao: 'Massa molar é a soma das massas atômicas de todos os átomos'
+                });
                 
+                // Passo 2: Identificar os elementos
+                let elementosTexto = elementosKeys.map(elem => {
+                    const qtd = elementos[elem];
+                    return qtd > 1 ? `${elem}: ${qtd} átomos` : `${elem}: ${qtd} átomo`;
+                }).join(' | ');
+                
+                devSteps.push({
+                    titulo: 'Identificar os elementos',
+                    formula: elementosTexto,
+                    descricao: 'Contagem de átomos de cada elemento na fórmula'
+                });
+                
+                // Passo 3: Calcular contribuição de cada elemento
+                let calculosTexto = '';
                 for (const elem of elementosKeys) {
                     if (!elementosMassas[elem]) {
                         showResult('mm-result', `❌ Elemento "${elem}" não encontrado na tabela!`, false);
-                        hideSteps('mm-steps');
+                        hideDesenvolvimento('mm');
                         return;
                     }
                     
@@ -1417,32 +2372,48 @@
                     const massaElemento = info.massa * quantidade;
                     massaTotal += massaElemento;
                     
-                    detalhes.push({
-                        simbolo: elem,
-                        nome: info.nome,
-                        massa: info.massa,
-                        quantidade: quantidade,
-                        total: massaElemento
-                    });
-                    
-                    steps.push(`• ${elem} (${info.nome}): ${info.massa} g/mol × ${quantidade} = ${massaElemento.toFixed(3)} g/mol`);
+                    calculosTexto += `${elem}: ${info.massa} × ${quantidade} = ${massaElemento.toFixed(3)} g/mol<br>`;
                 }
                 
-                steps.push(`<strong>Massa Molar Total = ${massaTotal.toFixed(3)} g/mol</strong>`);
+                devSteps.push({
+                    titulo: 'Calcular cada contribuição',
+                    formula: calculosTexto.replace(/<br>$/, ''),
+                    descricao: 'Massa atômica × quantidade de átomos'
+                });
+                
+                // Passo 4: Somar tudo
+                let somaFormula = elementosKeys.map(elem => {
+                    const info = elementosMassas[elem];
+                    const quantidade = elementos[elem];
+                    return (info.massa * quantidade).toFixed(3);
+                }).join(' + ');
+                
+                devSteps.push({
+                    titulo: 'Somar todas as contribuições',
+                    formula: `MM = ${somaFormula}`,
+                    descricao: 'Somando as massas de todos os elementos'
+                });
+                
+                // Passo 5: Resultado final
+                devSteps.push({
+                    titulo: 'Resultado Final',
+                    formula: `MM(${formula}) = ${massaTotal.toFixed(3)} g/mol`,
+                    descricao: 'Massa molar do composto'
+                });
                 
                 showResult('mm-result', `✓ Massa Molar de ${formula} = ${massaTotal.toFixed(3)} g/mol`);
-                showSteps('mm-steps', steps);
+                saveDesenvolvimento('mm', { steps: devSteps });
                 
             } catch (e) {
                 showResult('mm-result', '❌ Erro ao processar a fórmula. Verifique a sintaxe!', false);
-                hideSteps('mm-steps');
+                hideDesenvolvimento('mm');
             }
         }
 
         function clearMassaMolar() {
             document.getElementById('mm-formula').value = '';
             document.getElementById('mm-result').classList.remove('show');
-            document.getElementById('mm-steps').style.display = 'none';
+            hideDesenvolvimento('mm');
         }
 
         // Mostrar lista de elementos disponíveis
